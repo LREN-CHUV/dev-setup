@@ -6,4 +6,22 @@
     - vars/versions.yml
 
   roles:
-    - captain
+    - role: docker
+      tags:
+        - backend_dev
+        - frontend_dev
+        - containers_build
+    - role: docker-compose
+      tags:
+        - backend_dev
+        - containers_build
+    - role: captain
+      tags:
+        - backend_dev
+        - containers_build
+    - role: java
+      tags:
+        - backend_dev
+    - role: maven
+      tags:
+        - backend_dev
