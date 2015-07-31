@@ -1,0 +1,3 @@
+[submodule "roles/silpion.util"]
+	path = roles/silpion.util
+	url = https://github.com/silpion/ansible-util.git

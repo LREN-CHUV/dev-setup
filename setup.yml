@@ -1,0 +1,9 @@
+---
+
+- hosts: local
+  sudo: yes
+  vars_files:
+    - vars/versions.yml
+
+  roles:
+    - captain
