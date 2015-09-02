@@ -1,0 +1,6 @@
+---
+
+packagecontrol_packages:
+  - "GitGutter"
+  - "Terminal"
+  - "Ansible"

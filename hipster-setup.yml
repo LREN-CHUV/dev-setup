@@ -7,18 +7,22 @@
     - vars/settings.yml
 
   roles:
-    - role: docker-compose
+    - role: sublimetext
       tags:
         - backend_dev
         - frontend_dev
-        - algorithms_dev
-    - role: captain
+
+    - role: intellij
       tags:
         - backend_dev
-        - algorithms_dev
-    - role: java
+
+- hosts: local
+  vars_files:
+    - roles/versions.yml
+    - vars/settings.yml
+
+  roles:
+    - role: sublimetext3-packagecontrol
       tags:
         - backend_dev
-    - role: maven
-      tags:
-        - backend_dev
+        - frontend_dev
