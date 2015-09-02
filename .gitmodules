@@ -10,3 +10,6 @@
 [submodule "roles/maven"]
 	path = roles/maven
 	url = https://github.com/silpion/ansible-maven.git
+[submodule "roles"]
+	path = roles
+	url = git@gitlab.intranet.chuv:/mip/ansible-roles.git
