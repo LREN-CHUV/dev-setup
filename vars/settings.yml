@@ -4,3 +4,4 @@ packagecontrol_packages:
   - "GitGutter"
   - "Terminal"
   - "Ansible"
+  - "Dockerfile Syntax Highlighting"
