@@ -1,5 +1,9 @@
 ---
 
+docker_registry_config_orig_dir: envs/federation-dev
+docker_registry_ip: 155.105.202.126
+docker_registry_dns: registry.federation.mip.hbp
+
 packagecontrol_packages:
   - "GitGutter"
   - "Terminal"

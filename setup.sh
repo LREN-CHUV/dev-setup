@@ -41,6 +41,7 @@ do
             break
             ;;
         "All")
+            ANSIBLE_OPTS="--tags=backend_dev,frontend_dev,algorithms_dev"
             break
             ;;
         *) echo invalid option;;

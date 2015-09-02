@@ -34,6 +34,11 @@
         - backend_dev
         - frontend_dev
         - algorithms_dev
+    - role: docker-registry-slave
+      tags:
+        - backend_dev
+        - frontend_dev
+        - algorithms_dev
     - role: captain
       tags:
         - backend_dev
