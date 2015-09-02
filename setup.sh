@@ -48,8 +48,8 @@ do
 done
 
 PS3='Installation type: '
-options=("Standard", "Hipster")
-select opt in "${options[@]}"
+install_options=("Standard" "Hipster")
+select opt in "${install_options[@]}"
 do
     case $opt in
         "Standard")

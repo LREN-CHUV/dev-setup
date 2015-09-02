@@ -6,6 +6,8 @@
     - roles/versions.yml
     - vars/settings.yml
 
+# TODO: vim
+
   roles:
     - role: sublimetext
       tags:
