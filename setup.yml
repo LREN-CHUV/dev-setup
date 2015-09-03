@@ -49,3 +49,6 @@
     - role: maven
       tags:
         - backend_dev
+    - role: vagrant
+      tags:
+        - backend_dev
