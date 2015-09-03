@@ -13,13 +13,7 @@ get_script_dir () {
 
 cd $(get_script_dir)
 
-[ -x /usr/local/bin/ansible ] || (
-
-  # Install Ansible
-  sudo apt-get install -y git python-setuptools python-yaml python-jinja2 python-paramiko python-keyczar
-  sudo easy_install pip
-  sudo pip install ansible
-)
+./common/scripts/bootstrap.sh
 
 ANSIBLE_OPTS=""
 
