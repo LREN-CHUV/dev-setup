@@ -15,6 +15,7 @@
         - git-cola
         - meld
         - curl
+        - pgadmin3
       tags:
         - backend_dev
         - frontend_dev
