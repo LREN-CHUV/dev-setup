@@ -14,6 +14,11 @@
         - backend_dev
         - frontend_dev
 
+    - role: fish
+      tags:
+        - backend_dev
+        - frontend_dev
+
     - role: intellij
       tags:
         - backend_dev

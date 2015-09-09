@@ -9,3 +9,9 @@ packagecontrol_packages:
   - "Terminal"
   - "Ansible"
   - "Dockerfile Syntax Highlighting"
+
+fish_completions:
+  - 'composer'
+
+fish_users:
+  - "{{ ansible_user_id }}"
