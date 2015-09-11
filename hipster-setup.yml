@@ -8,6 +8,16 @@
 
 # TODO: vim
 
+  pre_tasks:
+
+    - name: Install some useful Python tools
+      pip: name={{item}} state=present
+      with_items:
+        - ansible-shell
+      tags:
+        - backend_dev
+        - frontend_dev
+
   roles:
     - role: sublimetext
       tags:
