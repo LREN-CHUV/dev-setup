@@ -53,6 +53,10 @@
     - role: sbt-extras
       tags:
         - backend_dev
+    - role: nodejs
+      tags:
+        - backend_dev
+        - frontend_dev
     - role: vagrant
       tags:
         - backend_dev
