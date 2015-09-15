@@ -33,6 +33,10 @@
       tags:
         - backend_dev
 
+    - role: activator
+      tags:
+        - backend_dev
+
 - hosts: local
   vars_files:
     - roles/versions.yml

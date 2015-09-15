@@ -1,15 +1,3 @@
-[submodule "roles/silpion.util"]
-	path = roles/silpion.util
-	url = https://github.com/silpion/ansible-util.git
-[submodule "roles/docker"]
-	path = roles/docker
-	url = https://github.com/AnsibleShipyard/ansible-docker.git
-[submodule "roles/java"]
-	path = roles/java
-	url = https://github.com/silpion/ansible-java.git
-[submodule "roles/maven"]
-	path = roles/maven
-	url = https://github.com/silpion/ansible-maven.git
 [submodule "roles"]
 	path = roles
 	url = git@gitlab.intranet.chuv:/mip/ansible-roles.git
