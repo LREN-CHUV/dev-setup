@@ -19,6 +19,12 @@
         - frontend_dev
 
   roles:
+
+    - role: yed
+      tags:
+        - backend_dev
+        - frontend_dev
+
     - role: sublimetext
       tags:
         - backend_dev
