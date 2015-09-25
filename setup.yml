@@ -16,6 +16,7 @@
         - meld
         - curl
         - pgadmin3
+        - dos2unix
       tags:
         - backend_dev
         - frontend_dev

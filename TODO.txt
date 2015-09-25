@@ -16,3 +16,20 @@ alias dockerclean='dockercleanc || true && dockercleani'
 
 
 sudo apt-get install r-base-core
+
+https://github.com/jcf/dotfiles
+https://github.com/geerlingguy/ansible-role-dotfiles
+https://github.com/pavel-v-chernykh/ansible-dotfiles
+https://github.com/NeuromaticSystems/ansible-ubuntu/blob/master/conf_and_bin.yml
+https://github.com/periclesmacedo/ansible-dev-linux
+https://github.com/AlbanAndrieu/ansible-locale
+https://galaxy.ansible.com/list#/roles/4795
+https://github.com/aussielunix/ansible-locale
+
+http://sift-tool.org/samples.html
+
+https://github.com/gleitz/howdoi
+
+sudo apt-add-repository ppa:inkscape.dev/stable
+sudo apt-get update
+sudo apt-get install inkscape
