@@ -17,6 +17,7 @@
         - curl
         - pgadmin3
         - dos2unix
+        - p7zip-full
       tags:
         - backend_dev
         - frontend_dev
