@@ -18,10 +18,21 @@
         - pgadmin3
         - dos2unix
         - p7zip-full
+        - python-setuptools
       tags:
         - backend_dev
         - frontend_dev
         - algorithms_dev
+
+    - name: Install packages for developers
+      apt: name={{item}} state=present
+      with_items:
+        - subversion
+        - git-svn
+        - sparkleshare
+      tags:
+        - backend_dev
+        - frontend_dev
 
     - name: Install some useful Python tools
       pip: name={{item}} state=present
@@ -30,6 +41,7 @@
       tags:
         - backend_dev
         - frontend_dev
+        - algorithms_dev
 
   roles:
     - role: docker-compose
