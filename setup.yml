@@ -49,28 +49,40 @@
         - backend_dev
         - frontend_dev
         - algorithms_dev
+
     - role: docker-registry-slave
       tags:
         - backend_dev
         - frontend_dev
         - algorithms_dev
+
     - role: captain
       tags:
         - backend_dev
         - algorithms_dev
+
     - role: java
       tags:
         - backend_dev
+
     - role: maven
       tags:
         - backend_dev
+
     - role: sbt-extras
       tags:
         - backend_dev
+
     - role: nodejs
       tags:
         - backend_dev
         - frontend_dev
+
+    - role: chrome
+      tags:
+        - backend_dev
+        - frontend_dev
+
     - role: vagrant
       tags:
         - backend_dev

@@ -1,6 +1,6 @@
 [submodule "roles"]
 	path = roles
-	url = git@gitlab.intranet.chuv:/mip/ansible-roles.git
+	url = git@gitlab.intranet.chuv:/mip-infra/ansible-roles.git
 [submodule "common"]
 	path = common
-	url = git@gitlab.intranet.chuv:mip/common-scripts.git
+	url = git@gitlab.intranet.chuv:/mip-infra/common-scripts.git
