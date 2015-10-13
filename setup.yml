@@ -19,6 +19,7 @@
         - dos2unix
         - p7zip-full
         - python-setuptools
+        - python-pip
       tags:
         - backend_dev
         - frontend_dev
