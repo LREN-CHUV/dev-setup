@@ -35,3 +35,15 @@ sudo apt-get install inkscape
 docker run -d -p 9000:9000 --privileged -v /var/run/docker.sock:/var/run/docker.sock dockerui/dockerui
 
 https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
+
+# Install some dependencies to build the MIP ----------------------------------
+
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer.phar
+alias composer='/usr/local/bin/composer.phar'
+
+sudo apt-get install git nodejs npm nodejs-legacy php5 php5-sqlite
+
+sudo npm install -g bower grunt-cli
+
+# -----------------------------------------------------------------------------
