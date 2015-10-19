@@ -87,3 +87,8 @@
     - role: vagrant
       tags:
         - backend_dev
+
+    - role: yed
+      tags:
+        - backend_dev
+        - frontend_dev

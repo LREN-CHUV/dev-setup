@@ -10,6 +10,13 @@
 
   pre_tasks:
 
+    - name: Install nitro-powered packages
+      apt: name={{item}} state=present
+      with_items:
+        - sshuttle
+      tags:
+        - backend_dev
+
     - name: Install some useful Python tools
       pip: name={{item}} state=present
       with_items:
@@ -19,11 +26,6 @@
         - frontend_dev
 
   roles:
-
-    - role: yed
-      tags:
-        - backend_dev
-        - frontend_dev
 
     - role: sublimetext
       tags:
