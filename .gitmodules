@@ -1,0 +1,3 @@
+[submodule "mmsi"]
+	path = mmsi
+	url = git@gitlab.intranet.chuv:/mip-infra/mip-microservices-infrastructure.git

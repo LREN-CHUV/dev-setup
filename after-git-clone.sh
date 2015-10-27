@@ -2,6 +2,6 @@
 
 git submodule update --init
 
-cd roles
+cd mmsi
 git submodule update --init
 
