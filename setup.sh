@@ -48,7 +48,7 @@ select opt in "${install_options[@]}"
 do
     case $opt in
         "Standard")
-            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ $ANSIBLE_OPTS $@ \
+            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ $ANSIBLE_OPTS --skip-tags=virtualbox $@ \
   setup.yml
             break
             ;;
