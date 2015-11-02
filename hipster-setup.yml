@@ -3,7 +3,7 @@
 - hosts: local
   become: yes
   vars_files:
-    - roles/versions.yml
+    - mmsi/roles/versions.yml
     - vars/settings.yml
 
 # TODO: vim
@@ -47,7 +47,7 @@
 
 - hosts: local
   vars_files:
-    - roles/versions.yml
+    - mmsi/roles/versions.yml
     - vars/settings.yml
 
   roles:

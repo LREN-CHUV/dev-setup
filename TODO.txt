@@ -47,3 +47,5 @@ sudo apt-get install git nodejs npm nodejs-legacy php5 php5-sqlite
 sudo npm install -g bower grunt-cli
 
 # -----------------------------------------------------------------------------
+
+https://github.com/andrewrothstein/ansible-jq
