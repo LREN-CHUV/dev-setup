@@ -2,4 +2,4 @@
 
 docker_registry_ip: 155.105.202.126
 docker_registry_dns: registry.federation.mip.hbp
-docker_opts: "--dns 155.105.251.102 --dns 155.105.251.86"
+docker_opts: "--storage-driver=overlay --dns 155.105.251.102 --dns 155.105.251.86"
