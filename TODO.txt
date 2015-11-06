@@ -18,11 +18,16 @@ alias dockerclean='dockercleanc || true && dockercleani'
 https://github.com/jcf/dotfiles
 https://github.com/geerlingguy/ansible-role-dotfiles
 https://github.com/pavel-v-chernykh/ansible-dotfiles
+https://github.com/danieljaouen/ansible-dotfiles
 https://github.com/NeuromaticSystems/ansible-ubuntu/blob/master/conf_and_bin.yml
 https://github.com/periclesmacedo/ansible-dev-linux
 https://github.com/AlbanAndrieu/ansible-locale
 https://galaxy.ansible.com/list#/roles/4795
 https://github.com/aussielunix/ansible-locale
+
+Oh-my-fish plugins: https://gist.github.com/derekstavis/26b7fc254cbc9bc4d461
+https://github.com/sjl/z-fish
+https://github.com/edc/bass Make Bash utilities usable in Fish shell 
 
 http://sift-tool.org/samples.html
 
