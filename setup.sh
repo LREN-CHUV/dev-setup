@@ -13,7 +13,7 @@ get_script_dir () {
 
 cd $(get_script_dir)
 
-./common/scripts/bootstrap.sh
+./mmsi/common/scripts/bootstrap.sh
 
 ANSIBLE_OPTS=""
 
