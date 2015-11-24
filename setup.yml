@@ -43,6 +43,13 @@
       tags:
         - backend_dev
 
+    - name: Install packages for system administrator
+      apt: name={{item}} state=present
+      with_items:
+        - git-crypt
+      tags:
+        - backend_dev
+
     - name: Install some useful Python tools
       pip: name={{item}} state=present
       with_items:

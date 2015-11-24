@@ -18,7 +18,7 @@ cd $(get_script_dir)
 ANSIBLE_OPTS=""
 
 PS3='Select your role: '
-options=("Backend developer" "Frontend developer" "Algorithms developer" "All")
+options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -34,8 +34,12 @@ do
             ANSIBLE_OPTS="--tags=algorithms_dev"
             break
             ;;
+        "System administrator")
+            ANSIBLE_OPTS="--tags=sysadmin"
+            break
+            ;;
         "All")
-            ANSIBLE_OPTS="--tags=backend_dev,frontend_dev,algorithms_dev"
+            ANSIBLE_OPTS="--tags=backend_dev,frontend_dev,algorithms_dev,sysadmin"
             break
             ;;
         *) echo invalid option;;
