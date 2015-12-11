@@ -56,3 +56,5 @@ sudo npm install -g bower grunt-cli
 # -----------------------------------------------------------------------------
 
 https://github.com/andrewrothstein/ansible-jq
+
+* For Algo developers, consider docker pull rocker/ropensci
