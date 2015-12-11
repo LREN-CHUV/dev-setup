@@ -15,6 +15,8 @@ cd $(get_script_dir)
 
 ./common/scripts/bootstrap.sh
 
+[ -d roles/docker/tasks ] || ./after-git-clone.sh
+
 ANSIBLE_OPTS=""
 
 PS3='Select your role: '

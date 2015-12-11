@@ -3,7 +3,7 @@
 - hosts: local
   become: yes
   vars_files:
-    - roles/versions.yml
+    - vars/versions.yml
     - vars/settings.yml
 
   pre_tasks:
@@ -25,6 +25,7 @@
         - backend_dev
         - frontend_dev
         - algorithms_dev
+        - sysadmin
 
     - name: Install packages for developers
       apt: name={{item}} state=present
@@ -42,6 +43,7 @@
         - virtualbox
       tags:
         - backend_dev
+        - sysadmin
 
     - name: Install packages for system administrator
       apt: name={{item}} state=present
@@ -58,6 +60,7 @@
         - backend_dev
         - frontend_dev
         - algorithms_dev
+        - sysadmin
 
   roles:
     - role: docker-compose
@@ -65,17 +68,20 @@
         - backend_dev
         - frontend_dev
         - algorithms_dev
+        - sysadmin
 
     - role: docker-registry-slave
       tags:
         - backend_dev
         - frontend_dev
         - algorithms_dev
+        - sysadmin
 
     - role: captain
       tags:
         - backend_dev
         - algorithms_dev
+        - sysadmin
 
     - role: java
       tags:
@@ -107,3 +113,4 @@
     - role: vagrant
       tags:
         - backend_dev
+        - sysadmin

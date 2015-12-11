@@ -3,7 +3,7 @@
 - hosts: local
   become: yes
   vars_files:
-    - roles/versions.yml
+    - vars/versions.yml
     - vars/settings.yml
 
 # TODO: vim
@@ -16,6 +16,7 @@
         - sshuttle
       tags:
         - backend_dev
+        - sysadmin
 
     - name: Install some useful Python tools
       pip: name={{item}} state=present
@@ -47,7 +48,7 @@
 
 - hosts: local
   vars_files:
-    - roles/versions.yml
+    - vars/versions.yml
     - vars/settings.yml
 
   roles:
