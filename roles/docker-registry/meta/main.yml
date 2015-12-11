@@ -1,0 +1,9 @@
+---
+
+# TODO: run the registry with the Docker container executor.
+# See https://github.com/bergerx/marathon-cheatsheet/blob/master/docker-registry-aws-marathon.json
+
+dependencies:
+  - role: marathon-app
+  - role: docker-registry-slave
+    is_docker_registry_host: true

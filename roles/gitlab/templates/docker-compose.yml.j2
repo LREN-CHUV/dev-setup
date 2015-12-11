@@ -1,0 +1,14 @@
+# Docker-compose specification for Gitlab
+gitlab:
+  image: gitlab/gitlab-ce:{{ gitlab_version }}
+  container_name: gitlab
+  hostname: {{ gitlab_host }}
+  ports:
+    - "{{ gitlab_port }}:80"
+    - "{{ gitlab_https_port }}:443"
+    - "{{ gitlab_ssh_port }}:22"
+  volumes:
+    - /srv/docker/gitlab/config:/etc/gitlab
+    - /srv/docker/gitlab/logs:/var/log/gitlab
+    - /srv/docker/gitlab/data:/var/opt/gitlab
+  restart: always

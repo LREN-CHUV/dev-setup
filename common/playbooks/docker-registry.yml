@@ -1,0 +1,16 @@
+---
+
+- hosts: docker-registry
+  become: yes
+  vars_files:
+    - "{{ play_dir }}/vars/common.yml"
+    - "{{ play_dir }}/vars/versions.yml"
+
+  roles:
+
+    - role: docker-registry
+      tags: ['os-tools', 'container-platforms', 'docker-registry']
+
+    - role: audit-deployment
+      installed_component: docker-registry
+      tags: ['os-tools', 'container-platforms', 'docker-registry']

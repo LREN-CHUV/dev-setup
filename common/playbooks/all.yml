@@ -1,0 +1,23 @@
+---
+
+- include: base-system.yml
+
+- include: mesos-leader.yml
+
+- include: mesos-mixed.yml
+
+- include: mesos-follower.yml
+
+- include: docker-registry.yml
+
+- include: cleanup.yml
+
+- include: mip-services.yml
+
+- include: analytics-database.yml
+
+- include: workflow.yml
+
+- include: mip-frontend.yml
+
+- include: dev.yml

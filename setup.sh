@@ -13,7 +13,7 @@ get_script_dir () {
 
 cd $(get_script_dir)
 
-./mmsi/common/scripts/bootstrap.sh
+./common/scripts/bootstrap.sh
 
 ANSIBLE_OPTS=""
 
@@ -52,12 +52,12 @@ select opt in "${install_options[@]}"
 do
     case $opt in
         "Standard")
-            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ -e play_dir=$(pwd)/mmsi $ANSIBLE_OPTS --skip-tags=virtualbox $@ \
+            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ -e play_dir=$(pwd) $ANSIBLE_OPTS --skip-tags=virtualbox $@ \
   setup.yml
             break
             ;;
         "Hipster")
-            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ -e play_dir=$(pwd)/mmsi $ANSIBLE_OPTS $@ \
+            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ -e play_dir=$(pwd) $ANSIBLE_OPTS $@ \
   hipster-setup.yml
             break
             ;;

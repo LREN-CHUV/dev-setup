@@ -1,0 +1,26 @@
+---
+
+- hosts: mip-frontend
+  become: yes
+  vars_files:
+    - "{{ play_dir }}/vars/common.yml"
+    - ["{{ play_dir }}/vars/{{ datacenter }}-mip-frontend.yml", "{{ play_dir }}/vars/mip-frontend.yml"]
+    - "{{ play_dir }}/vars/versions.yml"
+
+  roles:
+    - role: php
+      tags: ['mip-frontend']
+      when: datacenter == 'federation'
+
+    - role: ssl-certs
+      tags: ['mip-frontend']
+
+    - role: nginx
+      tags: ['mip-frontend']
+
+    - role: services-index
+      tags: ['mip-frontend']
+
+    - role: audit-deployment
+      installed_component: mip-frontend
+      tags: ['mip-frontend']
