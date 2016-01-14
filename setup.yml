@@ -33,6 +33,9 @@
         - subversion
         - git-svn
         - sparkleshare
+        - pandoc
+        - texlive-fonts-recommended
+        - texlive-latex-recommended
       tags:
         - backend_dev
         - frontend_dev
@@ -49,6 +52,7 @@
       apt: name={{item}} state=present
       with_items:
         - git-crypt
+        - pgpgpg
       tags:
         - backend_dev
 
