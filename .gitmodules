@@ -97,3 +97,6 @@
 [submodule "roles/nodejs"]
 	path = roles/nodejs
 	url = https://github.com/vevmesteren/ansible-role-nodejs.git
+[submodule "roles/docker-compose"]
+	path = roles/docker-compose
+	url = https://github.com/weareinteractive/ansible-docker-compose.git
