@@ -54,7 +54,7 @@
         - git-crypt
         - pgpgpg
       tags:
-        - backend_dev
+        - sysadmin
 
     - name: Install some useful Python tools
       pip: name={{item}} state=present
