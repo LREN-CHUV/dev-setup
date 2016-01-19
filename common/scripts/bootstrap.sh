@@ -23,9 +23,11 @@ cd $ROOT
   sudo pip install -r requirements.txt
 )
 
-[ -x /usr/bin/git ] || sudo apt-get install -y git
-
-[ -x /usr/bin/git-crypt ] || (
-  echo "Please enter the sudo password for this local computer"
-  ansible-playbook --ask-become-pass -i ../../envs/install/etc/ansible ../playbooks/ansible-install.yml
-)
+if [ "$1" != "--skip-git-crypt" ]; then
+  [ -x /usr/bin/git ] || sudo apt-get install -y git
+  
+  [ -x /usr/bin/git-crypt ] || (
+    echo "Please enter the sudo password for this local computer"
+    ansible-playbook --ask-become-pass -i ../../envs/install/etc/ansible ../playbooks/ansible-install.yml
+  )
+fi

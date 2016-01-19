@@ -13,7 +13,7 @@ get_script_dir () {
 
 cd $(get_script_dir)
 
-./common/scripts/bootstrap.sh
+./common/scripts/bootstrap.sh --skip-git-crypt
 
 [ -d roles/docker/tasks ] || ./after-git-clone.sh
 
