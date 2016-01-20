@@ -58,3 +58,9 @@ sudo npm install -g bower grunt-cli
 https://github.com/andrewrothstein/ansible-jq
 
 * For Algo developers, consider docker pull rocker/ropensci
+
+* For admin, install shpkpr (https://github.com/shopkeep/shpkpr) to manage Marathon from cmd line
+
+* Use of --storage-driver=overlay for Docker doesnàt work on older Ubuntu 14.04, add auto detection for this feature
+
+* Install fish functions (u,p,r...) and aliases for docker, git...

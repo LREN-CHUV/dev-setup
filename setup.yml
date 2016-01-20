@@ -66,6 +66,18 @@
         - algorithms_dev
         - sysadmin
 
+    - name: Remove old software
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /opt/java/oracle/jdk1.8.0_51/
+      tags:
+        - backend_dev
+        - frontend_dev
+        - algorithms_dev
+        - sysadmin
+
   roles:
     - role: docker
       tags:
