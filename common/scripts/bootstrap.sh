@@ -19,8 +19,8 @@ cd $ROOT
 
   # Install Ansible
   sudo apt-get install -y git python-setuptools python-yaml python-jinja2 python-paramiko python-keyczar
-  sudo easy_install pip
-  sudo pip install -r requirements.txt
+  sudo -H easy_install pip
+  sudo -H pip install -r requirements.txt
 )
 
 if [ "$1" != "--skip-git-crypt" ]; then
