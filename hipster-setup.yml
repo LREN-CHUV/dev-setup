@@ -18,6 +18,11 @@
         - backend_dev
         - sysadmin
 
+    - name: Install dependencies for fish shell
+      apt: name={{item}} state=present
+      with_items:
+        - keychain
+
     - name: Install some useful Python tools
       pip: name={{item}} state=present
       with_items:
@@ -66,6 +71,9 @@
   vars_files:
     - vars/versions.yml
     - vars/settings.yml
+  vars:
+    packagecontrol_owner: "{{ ansible_user_id }}"
+    packagecontrol_group: "{{ ansible_user_id }}"
 
   roles:
     - role: sublimetext3-packagecontrol

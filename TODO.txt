@@ -64,3 +64,10 @@ https://github.com/andrewrothstein/ansible-jq
 * Use of --storage-driver=overlay for Docker doesnàt work on older Ubuntu 14.04, add auto detection for this feature
 
 * Install fish functions (u,p,r...) and aliases for docker, git...
+
+curl -sL get.fisherman.sh | fish
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+fisher install jethrokuan/fzf
+fisher install jethrokuan/autojump
+  + alias z=j

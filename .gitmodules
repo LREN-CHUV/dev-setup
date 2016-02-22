@@ -40,7 +40,7 @@
 	branch = master
 [submodule "roles/sublimetext"]
 	path = roles/sublimetext
-	url = https://github.com/jdauphant/ansible-role-sublimetext.git
+	url = https://github.com/ludovicc/ansible-role-sublimetext.git
 	branch = master
 [submodule "roles/sublimetext3-packagecontrol"]
 	path = roles/sublimetext3-packagecontrol

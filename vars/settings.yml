@@ -5,6 +5,8 @@ docker_registry_config_orig_dir: envs/federation-dev
 docker_registry_ip: 155.105.223.23
 docker_registry_dns: registry.federation.mip.hbp
 
+sublimetext_dl_source: "https://download.sublimetext.com"
+
 packagecontrol_packages:
   - "GitGutter"
   - "Terminal"
@@ -18,7 +20,6 @@ fish_completions:
   - 'composer'
   - 'cp'
   - 'date'
-  - 'docker'
   - 'dpkg'
   - 'echo'
   - 'env'
@@ -46,6 +47,7 @@ fish_completions:
   - 'vagrant'
   - 'vi'
   - 'vim'
+#  - 'docker'
 
 fish_users:
   - "{{ ansible_user_id }}"

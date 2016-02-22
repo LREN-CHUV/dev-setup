@@ -43,7 +43,7 @@ workflow_functions:
     docker_image: "registry.federation.mip.hbp/mip_node/r-linear-regression:f869d66"
 
 # IDEs
-sublimetext_build: "3083"
+sublimetext_build: "3103"
 intellij_version: "15.0.3"
 yed_version: "3.14.4"
 soapui_version: "5.2.1"
