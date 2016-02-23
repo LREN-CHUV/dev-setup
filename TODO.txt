@@ -69,5 +69,12 @@ curl -sL get.fisherman.sh | fish
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 fisher install jethrokuan/fzf
-fisher install jethrokuan/autojump
-  + alias z=j
+#fisher install jethrokuan/autojump
+#  + alias z=j
+#sudo sh -c "curl https://raw.githubusercontent.com/rupa/z/master/z.sh > /usr/local/bin/z.sh && chmod +x /usr/local/bin/z.sh"
+#fisher install oh-my-fish/plugin-z
+# add set -g Z_SCRIPT_PATH /usr/local/bin/z.sh to ~/.config/fish/config.sh, before source $fisher_home/config.fish
+sudo sh -c "curl https://raw.githubusercontent.com/clvv/fasd/1.0.1/fasd > /usr/local/bin/fasd && chmod +x /usr/local/bin/fasd"
+fisher install available
+fisher install autoinit
+fisher install fasd # oh-my-fish/plugin-fasd
