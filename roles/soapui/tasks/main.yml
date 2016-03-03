@@ -39,8 +39,6 @@
   tags:
     - soapui
 
-- debug: var=soapui_bin_directory
-- debug: var=soapui_bin_archive
 - name: extract the SoapUI desktop icon from the program JAR
   command: jar -xf {{ soapui_bin_archive }} {{ soapui_icon_path }}/{{ soapui_icon_file }}
            chdir={{ soapui_bin_directory }}
