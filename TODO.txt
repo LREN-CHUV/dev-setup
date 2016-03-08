@@ -78,3 +78,6 @@ sudo sh -c "curl https://raw.githubusercontent.com/clvv/fasd/1.0.1/fasd > /usr/l
 fisher install available
 fisher install autoinit
 fisher install fasd # oh-my-fish/plugin-fasd
+
+# Algorithm developer:
+  sudo npm install -g yaml2json json2yaml
