@@ -13,6 +13,15 @@
   vars:
     uri: "{{ internal_marathon_url }}"
 
+- name: Remove old Postgres using Marathon
+  marathon_app:
+    uri: "{{ internal_marathon_url }}"
+    id: "{{ postgres_marathon_id }}"
+    state: "absent"
+    waitTimeout: 600
+  async: 600
+  poll: 1
+
 - name: Launch Postgres using Marathon
   marathon_app:
     uri: "{{ internal_marathon_url }}"

@@ -7,10 +7,10 @@ captain_version: "0.8.0"
 docker_compose_version: "1.6.2"
 docker_version: "1.10.3"
 docker_package_version: "0"
-docker_registry_version: "2.3.0"
+docker_registry_version: "2.3.1"
 
-mesos_version: "0.27.1"
-mesos_package_version: "2.0.226"
+mesos_version: "0.27.2"
+mesos_package_version: "2.0.15"
 marathon_version: "0.15.3"
 marathon_package_version: "1.0.463"
 chronos_version: "2.4.0"
@@ -35,14 +35,14 @@ virtualbox_version: "5.0"
 vagrant_version: "1.8.1"
 
 # Versions of our Docker containers
-workflow_version: "d1ab4c9"
+workflow_version: "9b24905"
 workflow_functions:
   - name: boxplot
-    docker_image: "hbpmip/r-summary-stats:50bcd11"
+    docker_image: "hbpmip/r-summary-stats:52198fd"
   - name: summarystatistics
-    docker_image: "hbpmip/r-summary-stats:50bcd11"
+    docker_image: "hbpmip/r-summary-stats:52198fd"
   - name: linearregression
-    docker_image: "hbpmip/r-linear-regression:d2e1a59"
+    docker_image: "hbpmip/r-linear-regression:52198fd"
 
 # IDEs
 sublimetext_build: "3103"
