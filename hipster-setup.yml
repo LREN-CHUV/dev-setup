@@ -54,6 +54,11 @@
         - backend_dev
         - frontend_dev
 
+    - role: atom
+      tags:
+        - backend_dev
+        - frontend_dev
+
     - role: fish
       tags:
         - backend_dev

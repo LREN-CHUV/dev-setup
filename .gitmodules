@@ -109,3 +109,6 @@
 [submodule "roles/silpion.lib"]
 	path = roles/silpion.lib
 	url = https://github.com/silpion/ansible-lib.git
+[submodule "roles/atom"]
+	path = roles/atom
+	url = https://github.com/mglaman/ansible-role-atom.git

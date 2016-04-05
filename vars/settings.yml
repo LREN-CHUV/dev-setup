@@ -13,6 +13,22 @@ packagecontrol_packages:
   - "Ansible"
   - "Dockerfile Syntax Highlighting"
 
+atom_packages:
+  - atom-beautify
+  - autoclose-html
+  - highlight-selected
+  - language-babel
+  - react
+  - linter
+  - linter-eslint
+  - minimap
+  - minimap-highlight-selected
+  - pigments
+  - seti-ui
+  - monokai-seti
+atom_user: '{{ user }}'
+atom_desktop_icon: true
+
 fish_completions:
   - 'apt-get'
   - 'chmod'

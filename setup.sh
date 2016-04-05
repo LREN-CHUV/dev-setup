@@ -17,7 +17,7 @@ cd $(get_script_dir)
 
 [ -d roles/docker/tasks ] || ./after-git-clone.sh
 
-ANSIBLE_OPTS=""
+ANSIBLE_OPTS="-e user=$USER"
 
 PS3='Select your role: '
 options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
@@ -25,23 +25,22 @@ select opt in "${options[@]}"
 do
     case $opt in
         "Backend developer")
-            ANSIBLE_OPTS="--tags=backend_dev"
+            ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=backend_dev"
             break
             ;;
         "Frontend developer")
-            ANSIBLE_OPTS="--tags=frontend_dev"
+            ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=frontend_dev"
             break
             ;;
         "Algorithms developer")
-            ANSIBLE_OPTS="--tags=algorithms_dev"
+            ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=algorithms_dev"
             break
             ;;
         "System administrator")
-            ANSIBLE_OPTS="--tags=sysadmin"
+            ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=sysadmin"
             break
             ;;
         "All")
-            ANSIBLE_OPTS=""
             break
             ;;
         *) echo invalid option;;
