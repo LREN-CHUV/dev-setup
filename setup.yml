@@ -54,6 +54,7 @@
       with_items:
         - git-crypt
         - pgpgpg
+        - ccze # Log colorizer - http://mayurrokade.com/blog/color-highlight-your-logs-with-ccze/
       tags:
         - sysadmin
 
@@ -61,6 +62,7 @@
       pip: name={{item}} state=present
       with_items:
         - httpie
+        - wharfee # Docker CLI
       tags:
         - backend_dev
         - frontend_dev

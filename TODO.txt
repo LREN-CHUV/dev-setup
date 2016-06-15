@@ -83,3 +83,5 @@ fisher install fasd # oh-my-fish/plugin-fasd
   sudo npm install -g yaml2json json2yaml
 
 sudo -H npm install -g ungit
+
+https://github.com/TomasTomecek/sen
