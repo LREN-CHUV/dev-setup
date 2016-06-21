@@ -6,8 +6,20 @@
     - "{{ play_dir }}/vars/common.yml"
     - "{{ play_dir }}/vars/versions.yml"
 
+  pre_tasks:
+
+    - name: Create MIP group
+      group: name=mip
+
+    - name: Create MIP user
+      user: name=mip group=mip
+
   roles:
     - role: base-system
+      tags: ['runtimes']
+
+    # Setup etckeeper and force it to use Git
+    - role: etckeeper
       tags: ['runtimes']
 
     - role: audit-deployment
