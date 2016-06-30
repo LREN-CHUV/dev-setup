@@ -17,7 +17,7 @@ cd $(get_script_dir)
 
 [ -d roles/docker/tasks ] || ./after-git-clone.sh
 
-ANSIBLE_OPTS="-e user=$USER -vvvv"
+ANSIBLE_OPTS="-e user=$USER"
 
 PS3='Select your role: '
 options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")

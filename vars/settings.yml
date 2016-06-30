@@ -18,7 +18,6 @@ atom_packages:
   - autoclose-html
   - highlight-selected
   - language-babel
-  - react
   - linter
   - linter-eslint
   - minimap
@@ -26,6 +25,15 @@ atom_packages:
   - pigments
   - seti-ui
   - monokai-seti
+  - activate-power-mode
+  - git-time-machine
+  - language-matlab
+  - gitlab
+  - autocomplete-plus
+  - project-manager
+  - find-and-replace
+  - markdown-preview
+
 atom_user: '{{ user }}'
 atom_desktop_icon: true
 
