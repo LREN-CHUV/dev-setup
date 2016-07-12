@@ -1,0 +1,51 @@
+---
+
+cbrain_portal_marathon_id: /cbrain/portal
+
+# Pin the portal to a particular host
+cbrain_portal_marathon_host: '{{ inventory_hostname }}'
+# Port exposed by Marathon, must be in the range [4000, 5000[, [31000,32000[
+cbrain_portal_port: 4580
+
+# Mode used when stating CBrain
+#     development: starts the application in Rails development mode."
+#     test:        starts the application in Rails test mode."
+#     production:  starts the application in Rails production mode."
+cbrain_portal_mode: 'development'
+cbrain_portal_user: 'cbrain'
+cbrain_portal_group: 'cbrain'
+
+cbrain_portal_image: 'mcin/cbrain_portal'
+cbrain_portal_version: "dev"
+
+cbrain_portal_mem: 1572.0
+
+cbrain_db_marathon_id: /cbrain/db
+cbrain_db_user: cbrain
+cbrain_db_password: cbrain
+cbrain_db_marathon_host: '{{ inventory_hostname }}'
+cbrain_db_port: 4506
+cbrain_db_database: '{{ cbrain_db_user }}'
+
+cbrain_portal_data_cache_dir: '/srv/docker/cbrain_portal/cache'
+cbrain_portal_ssh_dir: '/srv/docker/cbrain_portal/.ssh'
+cbrain_portal_plugins_dir: '/srv/docker/cbrain_portal/plugins'
+cbrain_portal_data_provider_dir: '/srv/docker/cbrain_portal/data'
+
+cbrain_portal_docker_parameters: []
+cbrain_portal_dependencies:
+  - '{{ cbrain_db_marathon_id }}'
+
+# CBrain plugins should be the same in both Portal and Bourreau
+cbrain_plugins:
+  - name: neuro
+    git_repo: https://github.com/aces/cbrain-plugins-neuro.git
+    git_version: HEAD
+
+cbrain_bourreau_marathon_host: '{{ inventory_hostname }}'
+cbrain_bourreau_ssh_port: 4522
+cbrain_data_provider_marathon_host: '{{ inventory_hostname }}'
+cbrain_data_provider_ssh_port: 4523
+
+# URL to marathon master internal to the current cluster. You need to ensure that Ansible can reach that URL.
+internal_marathon_url: http://localhost:5080
