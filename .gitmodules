@@ -87,6 +87,9 @@
 [submodule "roles/etckeeper"]
         path = roles/etckeeper
         url = https://github.com/silpion/ansible-etckeeper
+[submodule "roles/openjdk"]
+	path = roles/openjdk
+	url = https://github.com/AnsibleShipyard/ansible-java.git
 [submodule "roles/fish"]
        path = roles/fish
        url = https://github.com/SobanVuex/ansible-fish.git
