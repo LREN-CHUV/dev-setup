@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Simulate the LREN infrastructure in a Vagrant box.
+# Demo of CBrain in a Vagrant box.
 #
 # You need to install the vagrant-hostmanager plugin before running vagrant up to start the VM:
 #
@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if Vagrant.has_plugin? 'vagrant-hostmanager'
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
-    config.hostmanager.aliases = ["front"]
+    config.hostmanager.aliases = []
   else
     fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager"
   end
@@ -72,7 +72,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   ansible_inventory_dir = "envs/vagrant/etc/ansible"
 
-  config.vm.provision "shell", inline: "grep cbrain_master /etc/hosts || echo '10.0.2.15 cbrain_master' >> /etc/hosts"
+  config.vm.provision "shell", inline: "grep cbrain_master /etc/hosts || echo '192.168.33.66 cbrain_master' >> /etc/hosts"
+  # Mapping ansible roles with their git repositories messes with etckeeper
+  config.vm.provision "shell", inline: "[ -f /etc/ansible/.gitignore ] || echo 'roles/' > /etc/ansible/.gitignore"
 
   # Run provisioning with ansible
   config.vm.provision "ansible" do |ansible|
@@ -81,7 +83,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.limit = 'all'
       ansible.verbose = "vvvv"
       ansible.raw_ssh_args = ['-o ForwardAgent=yes']
-      # ansible.tags = ['airflow']
+      ansible.skip_tags = ['mesos-ui']
       # Use this to override ansible playbook variables
       ansible.extra_vars = {
         play_dir: Dir.pwd + '/../../..'
