@@ -18,8 +18,13 @@ atom_packages:
   - autoclose-html
   - highlight-selected
   - language-babel
+  - language-ansible
+  - language-docker
   - linter
   - linter-eslint
+  - linter-ansible-linting
+  - linter-docker
+  - autocomplete-ansible
   - minimap
   - minimap-highlight-selected
   - pigments
