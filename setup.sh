@@ -17,7 +17,7 @@ cd $(get_script_dir)
 
 [ -d roles/docker/tasks ] || ./after-git-clone.sh
 
-ANSIBLE_OPTS="-e user=$USER"
+ANSIBLE_OPTS="-e user=$USER -e user_home=$HOME $ANSIBLE_OPTS -e play_dir=$(pwd)"
 
 PS3='Select your role: '
 options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
@@ -41,6 +41,7 @@ do
             break
             ;;
         "All")
+        ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=fish"
             break
             ;;
         *) echo invalid option;;
@@ -53,12 +54,12 @@ select opt in "${install_options[@]}"
 do
     case $opt in
         "Standard")
-            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ -e play_dir=$(pwd) $ANSIBLE_OPTS --skip-tags=virtualbox $@ \
+            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ --skip-tags=virtualbox $@ \
   setup.yml
             break
             ;;
         "Hipster")
-            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ -e play_dir=$(pwd) $ANSIBLE_OPTS $@ \
+            ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ $ANSIBLE_OPTS $@ \
   hipster-setup.yml
             break
             ;;

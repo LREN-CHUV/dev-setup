@@ -11,7 +11,9 @@
   pre_tasks:
 
     - name: Install nitro-powered packages
-      apt: name={{item}} state=present
+      apt:
+        name: "{{item}}"
+        state: present
       with_items:
         - sshuttle
       tags:
@@ -19,12 +21,20 @@
         - sysadmin
 
     - name: Install dependencies for fish shell
-      apt: name={{item}} state=present
+      apt:
+        name: "{{item}}"
+        state: present
       with_items:
         - keychain
+      tags:
+        - backend_dev
+        - frontend_dev
+        - fish
 
     - name: Install some useful Python tools
-      pip: name={{item}} state=present
+      pip:
+        name: "{{item}}"
+        state: present
       with_items:
         - ansible-shell
         - ansible-lint
@@ -57,6 +67,7 @@
       tags:
         - backend_dev
         - frontend_dev
+        - sublimetext
 
     - role: intellij
       tags:
@@ -75,6 +86,9 @@
       tags:
         - backend_dev
         - frontend_dev
+        - fish
+
+# Tasks not requiring root privileges
 
 - hosts: local
   become: no
@@ -90,3 +104,19 @@
       tags:
         - backend_dev
         - frontend_dev
+        - sublimetext
+
+  post_tasks:
+
+    - name: Setup helper functions for fish
+      copy:
+        src: 'functions/{{ item }}'
+        dest: '{{ user_home }}/.config/fish/functions/'
+      with_items:
+        - "p.fish"
+        - "s.fish"
+        - "u.fish"
+      tags:
+      - backend_dev
+      - frontend_dev
+      - fish
