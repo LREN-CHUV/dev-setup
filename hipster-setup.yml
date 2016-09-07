@@ -12,7 +12,7 @@
 
     - name: Install nitro-powered packages
       apt:
-        name: "{{item}}"
+        name: "{{ item }}"
         state: present
       with_items:
         - sshuttle
@@ -22,7 +22,7 @@
 
     - name: Install dependencies for fish shell
       apt:
-        name: "{{item}}"
+        name: "{{ item }}"
         state: present
       with_items:
         - keychain
@@ -33,7 +33,7 @@
 
     - name: Install some useful Python tools
       pip:
-        name: "{{item}}"
+        name: "{{ item }}"
         state: present
       with_items:
         - ansible-shell
@@ -41,6 +41,17 @@
       tags:
         - backend_dev
         - frontend_dev
+
+    - name: Install some Ruby tools for Atom
+      gem:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - rubocop # required for Atom beautify
+      tags:
+        - backend_dev
+        - frontend_dev
+        - atom
 
     - name: Remove old software
       file:
@@ -81,6 +92,7 @@
       tags:
         - backend_dev
         - frontend_dev
+        - atom
 
     - role: fish
       tags:
