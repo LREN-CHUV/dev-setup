@@ -21,7 +21,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # TODO: wait for fix from Canonical https://bugs.launchpad.net/cloud-images/+bug/1565985
   # config.vm.box = "ubuntu/xenial64"
   # config.vm.box = "gbarbieru/xenial"
-  config.vm.box = "ubuntu/trusty64"
+  # config.vm.box = "ubuntu/trusty64"
+   config.vm.box = "geerlingguy/ubuntu1604"
 
   if Vagrant.has_plugin? 'vagrant-hostmanager'
     config.hostmanager.enabled = true
@@ -66,7 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.name = "woken-mesos"
 
       # Use VBoxManage to customize the VM. For example to change memory:
-      vb.customize ["modifyvm", :id, "--memory", "4048", "--cpus", "3", "--ioapic", "on"]
+      vb.customize ["modifyvm", :id, "--memory", "8096", "--cpus", "3", "--ioapic", "on"]
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
     end

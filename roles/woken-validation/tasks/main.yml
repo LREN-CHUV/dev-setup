@@ -2,11 +2,11 @@
 
 # Default user in Docker appears as user 999 outside
 - name: Create directory
-  file: state=directory path={{ woken_config_dir }} mode=0700 owner=999 group=999
+  file: state=directory path={{ woken_validation_config_dir }} mode=0700 owner=999 group=999
   become: True
 
 - name: Setup configuration for the woken application
-  template: src=application.conf.j2 dest={{ woken_config_dir }}/application.conf mode=0700 owner=999 group=999
+  template: src=application.conf.j2 dest={{ woken_validation_config_dir }}/application.conf mode=0700 owner=999 group=999
   become: True
 
 - name: Wait for Marathon
@@ -14,10 +14,10 @@
   vars:
     uri: "{{ internal_marathon_url }}"
 
-- name: Delete old woken app using Marathon
+- name: Delete old woken validation app using Marathon
   marathon_app:
     uri: "{{ internal_marathon_url }}"
-    id: "{{ woken_marathon_id }}"
+    id: "{{ woken_validation_marathon_id }}"
     state: "absent"
     wait_timeout: 600
   async: 600
@@ -25,79 +25,74 @@
   delegate_to: "{{ groups['control'][0] }}"
 
 # Host networking is required on Federation to be able to use Denodo JDBC over RMI driver
-- name: Launch woken app using Marathon (host networking)
+- name: Launch woken validation app using Marathon (host networking)
   marathon_app:
     uri: "{{ internal_marathon_url }}"
-    id: "{{ woken_marathon_id }}"
+    id: "{{ woken_validation_marathon_id }}"
     state: "present"
-    docker_image: "{{ woken_docker_image }}"
+    docker_image: "{{ woken_validation_docker_image }}"
     docker_force_pull_image: true
     docker_network: HOST
-    docker_parameters: '{{ woken_docker_parameters }}'
+    docker_parameters: '{{ woken_validation_docker_parameters }}'
     container_volumes:
-      - containerPath: "/opt/woken/config"
-        hostPath: "{{ woken_config_dir }}"
+      - containerPath: "/opt/woken-validation/config"
+        hostPath: "{{ woken_validation_config_dir }}"
         mode: RW
     instances: 1
-    cpus: '{{ woken_cpus }}'
-    mem: '{{ woken_mem }}'
+    cpus: '{{ woken_validation_cpus }}'
+    mem: '{{ woken_validation_mem }}'
     ports: []
     require_ports: false
-    constraints: '{{ woken_marathon_constraints }}'
+    constraints: '{{ woken_validation_marathon_constraints }}'
     dependencies: []
     executor: ""
     wait_timeout: 600
     health_checks:
-      - protocol: HTTP
-        port: "{{ woken_http_port }}"
-        path: "/"
+      - protocol: TCP
+        port: "{{ woken_validation_akka_port }}"
         gracePeriodSeconds: 300
         intervalSeconds: 60
         timeoutSeconds: 20
         maxConsecutiveFailures: 2
   async: 600
   poll: 1
-  when: woken_docker_network == 'HOST'
+  when: woken_validation_docker_network == 'HOST'
   delegate_to: "{{ groups['control'][0] }}"
 
-- name: Launch woken using Marathon (bridge networking)
+- name: Launch woken validation using Marathon (bridge networking)
   marathon_app:
     uri: "{{ internal_marathon_url }}"
-    id: "{{ woken_marathon_id }}"
+    id: "{{ woken_validation_marathon_id }}"
     state: "present"
-    docker_image: "{{ woken_docker_image }}"
+    docker_image: "{{ woken_validation_docker_image }}"
     docker_force_pull_image: true
     docker_network: BRIDGE
     docker_port_mappings:
-      - hostPort: "{{ woken_http_port }}"
-        containerPort: 8087
-        name: 'http'
-      - hostPort: "{{ woken_akka_port }}"
-        containerPort: 8088
+      - hostPort: "{{ woken_validation_akka_port }}"
+        containerPort: 8082
         name: 'akka'
-    docker_parameters: '{{ woken_docker_parameters }}'
+    docker_parameters: '{{ woken_validation_docker_parameters }}'
     container_volumes:
-      - containerPath: "/opt/woken/config"
-        hostPath: "{{ woken_config_dir }}"
+      - containerPath: "/opt/woken-validation/config"
+        hostPath: "{{ woken_validation_config_dir }}"
         mode: RW
     instances: 1
-    cpus: '{{ woken_cpus }}'
-    mem: '{{ woken_mem }}'
+    cpus: '{{ woken_validation_cpus }}'
+    mem: '{{ woken_validation_mem }}'
     ports: []
     require_ports: false
-    constraints: '{{ woken_marathon_constraints }}'
+    constraints: '{{ woken_validation_marathon_constraints }}'
     dependencies: []
     executor: ""
     wait_timeout: 600
     health_checks:
-      - protocol: HTTP
+      - protocol: TCP
         portIndex: 0
-        path: "/"
         gracePeriodSeconds: 300
         intervalSeconds: 60
         timeoutSeconds: 20
         maxConsecutiveFailures: 2
   async: 600
   poll: 1
-  when: woken_docker_network == 'BRIDGE'
+  when: woken_validation_docker_network == 'BRIDGE'
   delegate_to: "{{ groups['control'][0] }}"

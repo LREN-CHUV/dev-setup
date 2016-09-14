@@ -6,11 +6,11 @@ docker_version: "1.12.1"
 docker_package_version: "0"
 docker_registry_version: "2.3.1"
 
-mesos_version: "1.0.0"
-mesos_package_version: "{% if ansible_distribution_release == 'xenial' %}2.0.86{% else %}2.0.89{% endif %}"
+mesos_version: "1.0.1"
+mesos_package_version: "{% if ansible_distribution_release == 'xenial' %}2.0.94{% else %}2.0.89{% endif %}"
 mesos_ui_version: "standalone-0.1.4"
-marathon_version: "1.1.2"
-marathon_package_version: "1.0.482"
+marathon_version: "1.1.3"
+marathon_package_version: "1.0.503"
 chronos_version: "2.4.0-ubuntu-14.04"
 
 airflow_version: '1.7.1.3'
@@ -31,20 +31,30 @@ nodejs_version: "0.10.37"
 nodejs_install_source: nodesource_debs
 
 # Versions of our Docker containers
-portal_frontend_version: "77e5b90"
-portal_backend_version: "3f0f2f9"
-woken_version: "0eaa1a6"
+portal_frontend_version: "4cffa95"
+portal_backend_version: "fff7e51"
+woken_version: "27ee24b"
 woken_functions:
   - name: boxplot
     docker_image: "hbpmip/r-summary-stats:2afe249"
+    predictive: false
   - name: summarystatistics
     docker_image: "hbpmip/r-summary-stats:2afe249"
+    predictive: false
   - name: linearregression
     docker_image: "hbpmip/r-linear-regression:2afe249"
+    predictive: false
+  - name: anova
+    docker_image: "hbpmip/r-linear-regression:2afe249"
+    predictive: false
   - name: knn
     docker_image: "hbpmip/java-rapidminer-knn:58e280f"
+    predictive: true
   - name: naivebayes
     docker_image: "hbpmip/java-rapidminer-naivebayes:58e280f"
+    predictive: true
+
+woken_validation_version: "27ee24b"
 
 # QA environment
 
@@ -65,7 +75,7 @@ vagrant_version: "1.8.5"
 
 # IDEs
 sublimetext_build: "3114"
-intellij_version: "2016.1.4"
+intellij_version: "2016.2.4"
 yed_version: "3.16.1"
 soapui_version: "5.2.1"
-atom_ver: '1.10.0'
+atom_ver: '1.10.2'
