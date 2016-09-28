@@ -34,6 +34,8 @@
     docker_port_mappings:
       - hostPort: '{{ portal_db_port }}'
         containerPort: 5432
+        name: 'postgres'
+        protocol: 'tcp'
     container_volumes:
       - containerPath: "/var/lib/postgresql/data"
         hostPath: "{{ portal_db_data_dir }}"
@@ -41,11 +43,14 @@
     env:
       POSTGRES_USER: "{{ portal_db_admin_user }}"
       POSTGRES_PASSWORD: "{{ portal_db_admin_password }}"
+    labels:
+      MARATHON_SINGLE_INSTANCE_APP: "true"
+      DATABASES: "{{ portal_db_databases }}"
     instances: 1
     cpus: '{{ portal_db_cpus }}'
     mem: '{{ portal_db_mem }}'
     ports: []
-    require_ports: false
+    require_ports: true
     constraints: [["hostname", "CLUSTER", "{{ portal_db_marathon_host }}"]]
     dependencies: []
     executor: ""
@@ -58,6 +63,8 @@
         intervalSeconds: 20
         timeoutSeconds: 10
         maxConsecutiveFailures: 5
+    upgrade_strategy_minimum_health_capacity: 0.0
+    upgrade_strategy_maximum_over_capacity: 0.0
   async: 600
   poll: 1
   delegate_to: "{{ groups['control'][0] }}"
@@ -72,16 +79,17 @@
     - curl
   when: ansible_os_family == 'Debian'
   delegate_to: "{{ groups['control'][0] }}"
+  become: True
 
+# run this task on the database host
 - name: Wait for the database to be up and running
   wait_for: >
     port="{{ portal_db_port }}"
-    delay=5
-  delegate_to: "{{ groups['control'][0] }}"
+    delay=2
 
 - name: Create a new database with name "portal"
   postgresql_db:
-    name: portal
+    name: "{{ portal_db_name }}"
     port: "{{ portal_db_port }}"
     login_host: "{{ portal_db_host }}"
     login_user: "{{ portal_db_admin_user }}"
@@ -94,7 +102,7 @@
     login_host: "{{ portal_db_host }}"
     login_user: "{{ portal_db_admin_user }}"
     login_password: "{{ portal_db_admin_password }}"
-    db: portal
+    db: "{{ portal_db_name }}"
     port: "{{ portal_db_port }}"
     name: "{{ portal_db_user }}"
     password: "{{ portal_db_password }}"

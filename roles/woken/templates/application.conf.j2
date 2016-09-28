@@ -1,4 +1,6 @@
 akka {
+  log-dead-letters = 1
+  log-dead-letters-during-shutdown = off
   loglevel = INFO
 
   actor {
@@ -17,9 +19,13 @@ akka {
       hostname = {{ woken_marathon_host }} # external (logical) hostname
       port = {{ woken_akka_port }} # external (logical) port
 
-{% if woken_validation_docker_network == 'BRIDGE' %}
+{% if woken_docker_network == 'BRIDGE' %}
       bind-hostname = localhost     # internal (bind) hostname
       bind-port = 8088              # internal (bind) port
+{% else %}
+      bind-hostname = "{{ woken_marathon_host }}"
+      bind-port = {{ woken_akka_port }} # Network interface will be bound to the woken_akka_port port,
+                     # and remoting protocol will expect messages sent to the bound port
 {% endif %}
 
       message-frame-size =  10000000b
@@ -31,7 +37,11 @@ akka {
   cluster {
 
     seed-nodes = [
-      "akka.tcp://woken@127.0.0.1:8088"
+{% if woken_docker_network == 'BRIDGE' %}
+      "akka.tcp://woken@localhost:8088"
+{% else %}
+      "akka.tcp://woken@{{ woken_marathon_host }}:{{ woken_akka_port }}"
+{% endif %}
     ]
 
     roles = ["woken"]
@@ -71,11 +81,11 @@ jobs {
 
 db {
   analytics {
-    jdbc_driver="{{ analytics_db_jdbc_driver }}"
-    jdbc_jar_path="{{ analytics_db_jdbc_jar }}"
-    jdbc_url="{{ analytics_db_jdbc_url }}"
-    jdbc_user="{{ analytics_db_user }}"
-    jdbc_password="{{ analytics_db_password }}"
+    jdbc_driver="{{ woken_result_db_jdbc_driver }}"
+    jdbc_jar_path="{{ woken_result_db_jdbc_jar }}"
+    jdbc_url="{{ woken_result_db_jdbc_url }}"
+    jdbc_user="{{ woken_result_db_user }}"
+    jdbc_password="{{ woken_result_db_password }}"
   }
 
 {% if woken_role == 'mip_federation' %}
@@ -88,11 +98,11 @@ db {
   }
 {% else %}
   ldsm {
-    jdbc_driver="{{ ldsm_db_jdbc_driver }}"
-    jdbc_jar_path="{{ ldsm_db_jdbc_jar }}"
-    jdbc_url="{{ ldsm_db_jdbc_url }}"
-    jdbc_user="{{ ldsm_db_user }}"
-    jdbc_password="{{ ldsm_db_password }}"
+    jdbc_driver="{{ woken_data_db_jdbc_driver }}"
+    jdbc_jar_path="{{ woken_data_db_jdbc_jar }}"
+    jdbc_url="{{ woken_data_db_jdbc_url }}"
+    jdbc_user="{{ woken_data_db_user }}"
+    jdbc_password="{{ woken_data_db_password }}"
   }
 {% endif %}
 }
@@ -113,7 +123,7 @@ defaultSettings {
 {% for fn in woken_functions %}
       {{ fn.name }} = {
         image = "{{ fn.docker_image }}"
-        predictive = "{{ fn.predictive }}"
+        predictive = {{ fn.predictive | lower }}
       }
 {% endfor %}
     }

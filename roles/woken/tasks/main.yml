@@ -44,7 +44,7 @@
     ports: []
     require_ports: false
     constraints: '{{ woken_marathon_constraints }}'
-    dependencies: []
+    dependencies: '{{ woken_dependencies }}'
     executor: ""
     wait_timeout: 600
     health_checks:
@@ -55,6 +55,8 @@
         intervalSeconds: 60
         timeoutSeconds: 20
         maxConsecutiveFailures: 2
+    upgrade_strategy_minimum_health_capacity: 0.0
+    upgrade_strategy_maximum_over_capacity: 0.0
   async: 600
   poll: 1
   when: woken_docker_network == 'HOST'
@@ -86,7 +88,7 @@
     ports: []
     require_ports: false
     constraints: '{{ woken_marathon_constraints }}'
-    dependencies: []
+    dependencies: '{{ woken_dependencies }}'
     executor: ""
     wait_timeout: 600
     health_checks:
@@ -97,6 +99,8 @@
         intervalSeconds: 60
         timeoutSeconds: 20
         maxConsecutiveFailures: 2
+    upgrade_strategy_minimum_health_capacity: 0.0
+    upgrade_strategy_maximum_over_capacity: 0.0
   async: 600
   poll: 1
   when: woken_docker_network == 'BRIDGE'

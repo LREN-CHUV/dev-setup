@@ -5,7 +5,7 @@
 meta_db_deploy: no
 
 # Used when meta_db_deploy is true
-meta_db_marathon_id: /frontend/meta-db
+meta_db_marathon_id: /reference/meta-db
 
 # Attach the Postgres database to a particular host. The hostname should be the name known by Marathon / Mesos
 meta_db_marathon_host: '{{ inventory_hostname }}'
@@ -22,10 +22,14 @@ meta_db_mem: 128.0
 # Port exposed by Marathon, must be in the range [31000,32000[
 meta_db_port: "{{ meta_db_port | default(31432) }}"
 meta_db_host: "{{ meta_db_host | default('locahost') }}"
+meta_db_name: meta
 meta_db_admin_user: "{{ meta_db_admin_user | default('postgres') }}"
 meta_db_admin_password: "{{ meta_db_admin_password | default('CHANGEME') }}"
 meta_db_user: meta
 # TO FILL - meta_db_password:
+
+# Used when meta_db_deploy is true
+meta_db_databases: "{{ meta_db_name }}"
 
 meta_db_data_dir: /srv/docker/meta-db/data
 

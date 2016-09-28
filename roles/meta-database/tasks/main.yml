@@ -37,6 +37,8 @@
     docker_port_mappings:
       - hostPort: '{{ meta_db_port }}'
         containerPort: 5432
+        name: 'postgres'
+        protocol: 'tcp'
     container_volumes:
       - containerPath: "/var/lib/postgresql/data"
         hostPath: "{{ meta_db_data_dir }}"
@@ -44,11 +46,14 @@
     env:
       POSTGRES_USER: "{{ meta_db_admin_user }}"
       POSTGRES_PASSWORD: "{{ meta_db_admin_password }}"
+    labels:
+      MARATHON_SINGLE_INSTANCE_APP: "true"
+      DATABASES: "{{ meta_db_databases }}"
     instances: 1
     cpus: '{{ meta_db_cpus }}'
     mem: '{{ meta_db_mem }}'
     ports: []
-    require_ports: false
+    require_ports: true
     constraints: [["hostname", "CLUSTER", "{{ meta_db_marathon_host }}"]]
     dependencies: []
     executor: ""
@@ -61,6 +66,8 @@
         intervalSeconds: 20
         timeoutSeconds: 10
         maxConsecutiveFailures: 5
+    upgrade_strategy_minimum_health_capacity: 0.0
+    upgrade_strategy_maximum_over_capacity: 0.0
   async: 600
   poll: 1
   delegate_to: "{{ groups['control'][0] }}"
@@ -76,16 +83,28 @@
     - curl
   when: ansible_os_family == 'Debian'
   delegate_to: "{{ groups['control'][0] }}"
+  become: True
 
+# See https://github.com/anarcher/ansible-docker-registry/issues/1
+- name: Make sure pip upgraded
+  command: easy_install -U pip
+  when: ansible_os_family == 'Debian'
+  delegate_to: "{{ groups['control'][0] }}"
+  become: True
+
+- name: Install Python module for Docker (required by docker_container task)
+  pip: name=docker-py state=present
+  delegate_to: "{{ groups['control'][0] }}"
+
+# run this task on the database host
 - name: Wait for the meta database to be up and running
   wait_for: >
     port="{{ meta_db_port }}"
-    delay=5
-  delegate_to: "{{ groups['control'][0] }}"
+    delay=2
 
 - name: Create a new database with name "meta"
   postgresql_db:
-    name: meta
+    name: "{{ meta_db_name }}"
     port: "{{ meta_db_port }}"
     login_host: "{{ meta_db_host }}"
     login_user: "{{ meta_db_admin_user }}"
@@ -98,7 +117,7 @@
     login_host: "{{ meta_db_host }}"
     login_user: "{{ portal_db_admin_user }}"
     login_password: "{{ portal_db_admin_password }}"
-    db: meta
+    db: "{{ meta_db_name }}"
     port: "{{ meta_db_port }}"
     name: "{{ meta_db_user }}"
     password: "{{ meta_db_password }}"
@@ -120,14 +139,10 @@
       dest: "V1_0__Create.sql"
   delegate_to: "{{ groups['control'][0] }}"
 
-- name: Install Python module for Docker (required by docker_container task)
-  pip: name=docker-py state=present
-  delegate_to: "{{ groups['control'][0] }}"
-
 # TODO: this task does not fail on error when using Ansible 2.1.1.0
 - name: Run Flyway migration on meta-db
   docker_container:
-    name: flyway
+    name: migrate_meta_db
     image: "lren/flyway:{{ flyway_version }}"
     command: migrate
     detach: no
@@ -140,8 +155,8 @@
       FLYWAY_DBMS: postgresql
       FLYWAY_HOST: '{{ meta_db_host }}'
       FLYWAY_PORT: '{{ meta_db_port }}'
-      FLYWAY_DATABASE_NAME: 'meta'
-      FLYWAY_SCHEMAS: "meta"
+      FLYWAY_DATABASE_NAME: '{{ meta_db_name }}'
+      FLYWAY_SCHEMAS: "public"
       FLYWAY_USER: '{{ portal_db_admin_user }}'
       FLYWAY_PASSWORD: '{{ portal_db_admin_password }}'
       FLYWAY_DRIVER: 'org.postgresql.Driver'

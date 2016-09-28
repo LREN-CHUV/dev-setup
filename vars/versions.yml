@@ -9,8 +9,8 @@ docker_registry_version: "2.3.1"
 mesos_version: "1.0.1"
 mesos_package_version: "{% if ansible_distribution_release == 'xenial' %}2.0.94{% else %}2.0.89{% endif %}"
 mesos_ui_version: "standalone-0.1.4"
-marathon_version: "1.1.3"
-marathon_package_version: "1.0.503"
+marathon_version: "1.3.0"
+marathon_package_version: "1.0.506"
 chronos_version: "2.4.0-ubuntu-14.04"
 
 airflow_version: '1.7.1.3'
@@ -31,9 +31,9 @@ nodejs_version: "0.10.37"
 nodejs_install_source: nodesource_debs
 
 # Versions of our Docker containers
-portal_frontend_version: "4cffa95"
-portal_backend_version: "fff7e51"
-woken_version: "27ee24b"
+portal_frontend_version: "469869a"
+portal_backend_version: "024190d"
+woken_version: "8d37cc2"
 woken_functions:
   - name: boxplot
     docker_image: "hbpmip/r-summary-stats:2afe249"
