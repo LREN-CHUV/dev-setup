@@ -58,11 +58,13 @@
       tags:
         - sysadmin
 
+    # wharfee is a Docker CLI
     - name: Install some useful Python tools
       pip: name={{item}} state=present
       with_items:
         - httpie
-        - wharfee # Docker CLI
+        - wharfee
+        - pre-commit
       tags:
         - backend_dev
         - frontend_dev
