@@ -104,13 +104,6 @@
         - algorithms_dev
         - sysadmin
 
-    - role: docker-registry-slave
-      tags:
-        - backend_dev
-        - frontend_dev
-        - algorithms_dev
-        - sysadmin
-
     - role: captain
       tags:
         - backend_dev
