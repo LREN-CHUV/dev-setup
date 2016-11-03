@@ -71,12 +71,34 @@
         - algorithms_dev
         - sysadmin
 
+    - name: Install some useful Python tools for system administrator
+      pip: name={{item}} state=present
+      with_items:
+        - ansible-inventory-grapher
+      tags:
+        - sysadmin
+
+    - name: Download ansible-cmdb
+      get_url:
+        url: "https://github.com/fboender/ansible-cmdb/releases/download/{{ ansible_cmdb_version }}/ansible-cmdb-{{ ansible_cmdb_version }}.deb"
+        dest: "/tmp/ansible-cmdb-{{ ansible_cmdb_version }}.deb"
+      tags:
+        - sysadmin
+
+    - name: Install ansible-cmdb for Debian family OS
+      apt:
+        deb: "/tmp/ansible-cmdb-{{ ansible_cmdb_version }}.deb"
+      tags:
+        - sysadmin
+
     - name: Remove old software
       file:
         path: "{{ item }}"
         state: absent
       with_items:
         - /opt/java/oracle/jdk1.8.0_51/
+        - /opt/intellij/idea-IC-145.1617.8/
+        - /opt/intellij/idea-IC-145.2070.6/
       tags:
         - backend_dev
         - frontend_dev
