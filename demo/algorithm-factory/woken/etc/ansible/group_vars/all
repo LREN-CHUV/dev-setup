@@ -6,15 +6,15 @@
 # See https://github.com/docker/docker/issues/18180#issuecomment-167042078
 docker_opts: "--dns=192.168.21.66"
 
-internal_mesos_url: "http://woken.local:5050"
-internal_marathon_url: "http://woken.local:5080"
-internal_chronos_url: "http://woken.local:4400"
-internal_woken_url: "http://woken.local:8087"
+internal_mesos_url: "http://demo.local:{{ mesos_leader_port }}"
+internal_marathon_url: "http://demo.local:{{ marathon_port }}"
+internal_chronos_url: "http://demo.local:{{ chronos_port }}"
+internal_woken_url: "http://demo.local:{{ woken_http_port }}"
 
 java_oracle_distribution: 'jdk'
 
-analytics_db_host: "woken.local"
-analytics_db_marathon_host: "woken"
+analytics_db_host: "demo.local"
+analytics_db_marathon_host: "demo"
 analytics_db_port: 31432
 analytics_db_user: "analytics"
 analytics_db_admin_user: "postgres"
@@ -27,8 +27,8 @@ analytics_db_mem: 128.0
 ldsm_db_marathon_id: "/algorithm-factory/demodb"
 ldsm_db_data_dir: /srv/docker/demodb/data
 ldsm_db_setup_scripts_dir: demo
-ldsm_db_host: "woken.local"
-ldsm_db_marathon_host: "woken"
+ldsm_db_host: "demo.local"
+ldsm_db_marathon_host: "demo"
 ldsm_db_port: 31433
 ldsm_db_user: ldsm
 ldsm_db_admin_user: "postgres"
@@ -38,9 +38,27 @@ ldsm_db_jdbc_jar: "/usr/lib/R/libraries/postgresql-9.4-1201.jdbc41.jar"
 ldsm_db_cpus: 0.2
 ldsm_db_mem: 128.0
 
-woken_port: 4087
+woken_http_port: 4087
+woken_akka_port: 4088
 woken_docker_network: HOST
-woken_marathon_host: "woken"
+woken_marathon_host: "demo"
+woken_mem: 512.0
 
 woken_role: mip_node
 woken_main_table: demo
+
+woken_docker_parameters:
+  - key: 'add-host'
+    value: "demo:192.168.21.66"
+  - key: 'add-host'
+    value: "demo.local:192.168.21.66"
+
+woken_validation_akka_port: 4082
+woken_validation_docker_network: BRIDGE
+woken_validation_marathon_host: "demo"
+
+woken_validation_docker_parameters:
+  - key: 'add-host'
+    value: "demo:192.168.21.66"
+  - key: 'add-host'
+    value: "demo.local:192.168.21.66"

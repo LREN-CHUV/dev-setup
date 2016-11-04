@@ -11,7 +11,10 @@ woken_config_dir: /srv/docker/woken/config
 
 # Port to use to expose woken to other services in the cluster.
 # Ignored if woken_docker_network == HOST, in this case woken can be reached under port 8087
-woken_port: 31087
+# Default to 8087 when using host networking, 31087 otherwise
+woken_http_port: "{% if woken_docker_network == 'BRIDGE' %}31087{% else %}8087{% endif %}"
+# Port used by Akka cluster
+woken_akka_port: "{% if woken_docker_network == 'BRIDGE' %}31088{% else %}8088{% endif %}"
 # Amount of CPU reserved for woken
 woken_cpus: 0.5
 # Amount of memory in mb reserved for woken
@@ -37,6 +40,15 @@ analytics_db_password: postgres
 analytics_db_jdbc_url: "jdbc:postgresql://{{ analytics_db_host }}:{{ analytics_db_port }}/analytics"
 analytics_db_jdbc_driver: "org.postgresql.Driver"
 analytics_db_jdbc_jar: "/usr/lib/R/libraries/postgresql-9.4-1201.jdbc41.jar"
+analytics_db_marathon_id: /algorithm-factory/analyticsdb
+
+woken_result_db_port: '{{ analytics_db_port }}'
+woken_result_db_host: '{{ analytics_db_host }}'
+woken_result_db_user: '{{ analytics_db_user }}'
+woken_result_db_password: '{{ analytics_db_password }}'
+woken_result_db_jdbc_url: '{{ analytics_db_jdbc_url }}'
+woken_result_db_jdbc_driver: '{{ analytics_db_jdbc_driver }}'
+woken_result_db_jdbc_jar: '{{ analytics_db_jdbc_jar }}'
 
 # How woken connects to the LDSM database containing the data to process
 ldsm_db_port: 31432
@@ -47,11 +59,24 @@ ldsm_db_jdbc_url: "jdbc:postgresql://{{ ldsm_db_host }}:{{ ldsm_db_port }}/analy
 ldsm_db_jdbc_driver: "org.postgresql.Driver"
 ldsm_db_jdbc_jar: "/usr/lib/R/libraries/postgresql-9.4-1201.jdbc41.jar"
 
+woken_data_db_port: '{{ ldsm_db_port }}'
+woken_data_db_host: '{{ ldsm_db_host }}'
+woken_data_db_user: '{{ ldsm_db_user }}'
+woken_data_db_password: '{{ ldsm_db_password }}'
+woken_data_db_jdbc_url: '{{ ldsm_db_jdbc_url }}'
+woken_data_db_jdbc_driver: '{{ ldsm_db_jdbc_driver }}'
+woken_data_db_jdbc_jar: '{{ ldsm_db_jdbc_jar }}'
+
 # URL to Chronos internal to the current cluster. You need to ensure that the woken application can reach that URL.
 internal_chronos_url: http://default:4400
+chronos_marathon_id: /algorithm-factory/chronos
 
 # URL to Marathon master internal to the current cluster. You need to ensure that Ansible can reach that URL.
 internal_marathon_url: http://localhost:5080
+
+woken_dependencies:
+  - '{{ chronos_marathon_id }}'
+  - '{{ analytics_db_marathon_id }}'
 
 # Roles are mip_node or mip_federation
 woken_role: mip_node
@@ -63,5 +88,16 @@ woken_main_table: adni_merge
 woken_functions:
   - name: boxplot
     docker_image: "hbpmip/r-summary-stats:latest"
+    predictive: false
   - name: linearregression
     docker_image: "hbpmip/r-linear-regression:latest"
+    predictive: false
+  - name: anova
+    docker_image: "hbpmip/r-linear-regression:latest"
+    predictive: false
+  - name: knn
+    docker_image: "hbpmip/java-rapidminer-knn:latest"
+    predictive: true
+  - name: naivebayes
+    docker_image: "hbpmip/java-rapidminer-naivebayes:latest"
+    predictive: true

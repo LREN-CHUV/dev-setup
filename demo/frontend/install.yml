@@ -19,6 +19,10 @@
 
 - include: ../../common/playbooks/portal-database.yml
 
+- include: ../../common/playbooks/meta-database.yml
+
+- include: ../../common/playbooks/science-database.yml
+
 - include: ../../common/playbooks/portal-backend.yml
 
 - include: ../../common/playbooks/portal-frontend.yml

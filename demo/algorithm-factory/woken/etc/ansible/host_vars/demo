@@ -5,7 +5,9 @@
 # is safe to store secrets such as passwords in it and then commit the file in a
 # Git repository
 
-ip_address: '192.168.41.66'
+ip_address: '192.168.21.66'
 
-portal_db_password: "portaldb"
-portal_db_admin_password: "portalroot"
+analytics_db_password: "analyticsdb"
+analytics_db_admin_password: "analyticsroot"
+ldsm_db_password: "ldsmdb"
+ldsm_db_admin_password: "ldsmroot"

@@ -20,21 +20,23 @@ dev_services_db_host: localhost
 dev_services_db_admin_user: postgres
 # TO FILL - dev_services_db_admin_password:
 
-gitlab_db_database: "gitlab"
+gitlab_db_name: "gitlab"
 gitlab_db_user: "gitlab"
 # TO FILL - gitlab_db_password:
 
-gitlab_ci_db_database: "gitlab_ci"
+gitlab_ci_db_name: "gitlab_ci"
 gitlab_ci_db_user: "gitlab_ci"
 # TO FILL - gitlab_ci_db_password:
 
-sonarqube_db_database: "sonar"
+sonarqube_db_name: "sonar"
 sonarqube_db_user: "sonar"
 # TO FILL - sonarqube_db_password:
 
-dev_services_db_data_dir: /srv/docker/portaldb/data
+dev_services_db_databases: "{{ gitlab_db_name }},{{ gitlab_ci_db_name }},{{ sonarqube_db_name }}"
 
-dev_services_db_setup_dir: /opt/portal-database/migration
+dev_services_db_data_dir: /srv/docker/meta-db/data
+
+dev_services_db_setup_dir: /opt/meta-database/migration
 
 # URL to marathon master internal to the current cluster. You need to ensure that Ansible can reach that URL.
 internal_marathon_url: http://localhost:5080

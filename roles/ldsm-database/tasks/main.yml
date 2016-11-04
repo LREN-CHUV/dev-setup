@@ -8,6 +8,8 @@
   include: ../../marathon-app/tasks/wait-for-marathon.yml
   vars:
     uri: "{{ internal_marathon_url }}"
+  tags:
+    - launch
 
 - name: Remove old LDSM DB using Marathon
   marathon_app:
@@ -18,6 +20,8 @@
   async: 600
   poll: 1
   delegate_to: "{{ groups['control'][0] }}"
+  tags:
+    - launch
 
 - name: Launch LDSM DB using Marathon
   marathon_app:
@@ -30,6 +34,8 @@
     docker_port_mappings:
       - hostPort: '{{ ldsm_db_port }}'
         containerPort: 5432
+        name: 'postgres'
+        protocol: 'tcp'
     container_volumes:
       - containerPath: "/var/lib/postgresql/data"
         hostPath: "{{ ldsm_db_data_dir }}"
@@ -37,11 +43,14 @@
     env:
       POSTGRES_USER: "{{ ldsm_db_admin_user }}"
       POSTGRES_PASSWORD: "{{ ldsm_db_admin_password }}"
+    labels:
+      MARATHON_SINGLE_INSTANCE_APP: "true"
+      DATABASES: "{{ ldsm_db_databases }}"
     instances: 1
     cpus: '{{ ldsm_db_cpus }}'
     mem: '{{ ldsm_db_mem }}'
     ports: []
-    require_ports: false
+    require_ports: true
     constraints: [["hostname", "CLUSTER", "{{ ldsm_db_marathon_host }}"]]
     dependencies: []
     executor: ""
@@ -54,9 +63,13 @@
         intervalSeconds: 20
         timeoutSeconds: 10
         maxConsecutiveFailures: 5
+    upgrade_strategy_minimum_health_capacity: 0.0
+    upgrade_strategy_maximum_over_capacity: 0.0
   async: 600
   poll: 1
   delegate_to: "{{ groups['control'][0] }}"
+  tags:
+    - launch
 
 - name: Install Python psycopg2 module for Postgres (required by postgresql_db task), pip and curl
   apt: name={{ item }} state=present
@@ -66,21 +79,28 @@
     - curl
   when: ansible_os_family == 'Debian'
   delegate_to: "{{ groups['control'][0] }}"
+  become: True
 
+# See https://github.com/anarcher/ansible-docker-registry/issues/1
+- name: Make sure pip upgraded
+  command: easy_install -U pip
+  when: ansible_os_family == 'Debian'
+  delegate_to: "{{ groups['control'][0] }}"
+  become: True
+
+- name: Install Python module for Docker (required by docker_container task)
+  pip: name=docker-py state=present
+  delegate_to: "{{ groups['control'][0] }}"
+
+# run this task on the database host
 - name: Wait for the database to be up and running
   wait_for: >
     port="{{ ldsm_db_port }}"
-    delay=5
-  delegate_to: "{{ groups['control'][0] }}"
-
-- debug: var=ldsm_db_admin_user
-  delegate_to: "{{ groups['control'][0] }}"
-- debug: var=ldsm_db_admin_password
-  delegate_to: "{{ groups['control'][0] }}"
+    delay=2
 
 - name: Create a new database with name "ldsm"
   postgresql_db:
-    name: ldsm
+    name: "{{ ldsm_db_name }}"
     port: "{{ ldsm_db_port }}"
     login_host: "{{ ldsm_db_host }}"
     login_user: "{{ ldsm_db_admin_user }}"
@@ -93,7 +113,7 @@
     login_host: "{{ ldsm_db_host }}"
     login_user: "{{ ldsm_db_admin_user }}"
     login_password: "{{ ldsm_db_admin_password }}"
-    db: ldsm
+    db: "{{ ldsm_db_name }}"
     port: "{{ ldsm_db_port }}"
     name: "{{ ldsm_db_user }}"
     password: "{{ ldsm_db_password }}"
@@ -104,6 +124,7 @@
   file:
     state: directory
     path: "{{ldsm_db_setup_dir}}"
+  delegate_to: "{{ groups['control'][0] }}"
 
 - name: Copy sql creation scripts
   copy:
@@ -111,24 +132,36 @@
     dest: "{{ldsm_db_setup_dir}}/{{ item | basename }}"
   with_fileglob:
    - "{{ ldsm_db_setup_scripts_dir }}/sql/*"
-
-- name: Install Python module for Docker (required by docker_container task)
-  pip: name=docker-py state=present
   delegate_to: "{{ groups['control'][0] }}"
+  when: not in_vagrant
 
+- name: Copy sql creation scripts (Vagrant)
+  copy:
+    src: "{{ item }}"
+    dest: "{{ldsm_db_setup_dir}}/{{ item | basename }}"
+  with_fileglob:
+   - "{{ ldsm_db_setup_scripts_dir }}/sql/*"
+  when: in_vagrant
+
+# TODO: this task does not fail on error when using Ansible 2.1.1.0
 - name: Run Flyway migration
   docker_container:
-    name: flyway
+    name: migrate_ldsm
     image: "lren/flyway:{{ flyway_version }}"
     command: migrate
     detach: no
+    network_mode: host
+    interactive: yes
+    # cleanup: yes
     volumes:
       - '{{ ldsm_db_setup_dir }}:/flyway/sql'
     env:
-      FLYWAY_DBMS: postgres
+      FLYWAY_DBMS: postgresql
       FLYWAY_HOST: '{{ ldsm_db_host }}'
       FLYWAY_PORT: '{{ ldsm_db_port }}'
-      FLYWAY_DATABASE_NAME: '{{ ldsm_db_admin_user }}'
+      FLYWAY_DATABASE_NAME: '{{ ldsm_db_name }}'
+      FLYWAY_SCHEMAS: "public"
       FLYWAY_USER: '{{ ldsm_db_admin_user }}'
       FLYWAY_PASSWORD: '{{ ldsm_db_admin_password }}'
+      FLYWAY_DRIVER: 'org.postgresql.Driver'
   delegate_to: "{{ groups['control'][0] }}"

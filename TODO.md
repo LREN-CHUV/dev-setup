@@ -79,3 +79,5 @@ fisher install fasd # oh-my-fish/plugin-fasd
 sudo -H npm install -g ungit
 
 https://github.com/TomasTomecek/sen
+
+https://github.com/nvbn/thefuck/
