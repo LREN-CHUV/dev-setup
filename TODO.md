@@ -29,7 +29,7 @@ https://github.com/jdauphant/ansible-role-dns
 
 Oh-my-fish plugins: https://gist.github.com/derekstavis/26b7fc254cbc9bc4d461
 https://github.com/sjl/z-fish
-https://github.com/edc/bass Make Bash utilities usable in Fish shell 
+https://github.com/edc/bass Make Bash utilities usable in Fish shell
 
 http://sift-tool.org/samples.html
 
