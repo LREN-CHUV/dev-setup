@@ -6,7 +6,7 @@ TODO
 alias dockerkillall='docker kill $(docker ps -q)'
 
 # Delete all stopped containers.
-alias dockercleanc='printf "\n>>> Deleting stopped containers\n\n" && docker rm $(docker ps -a -q)'
+alias dockercleanc='printf "\n>>> Deleting stopped containers\n\n" && docker rm $(docker ps -a -q --filter status=exited)'
 
 # Delete all untagged images.
 alias dockercleani='printf "\n>>> Deleting untagged images\n\n" && docker rmi $(docker images -q -f dangling=true)'
@@ -29,7 +29,11 @@ https://github.com/jdauphant/ansible-role-dns
 
 Oh-my-fish plugins: https://gist.github.com/derekstavis/26b7fc254cbc9bc4d461
 https://github.com/sjl/z-fish
-https://github.com/edc/bass Make Bash utilities usable in Fish shell 
+https://github.com/edc/bass Make Bash utilities usable in Fish shell
+
+https://github.com/fisherman/fisherman
+https://github.com/abaez/ansible-role-fish installs fisherman and bass
+also https://github.com/tobywf/ansible-dotfiles/blob/master/roles/fish/tasks/main.yml
 
 http://sift-tool.org/samples.html
 
@@ -42,16 +46,6 @@ sudo apt-get install inkscape
 docker run -d -p 9000:9000 --privileged -v /var/run/docker.sock:/var/run/docker.sock dockerui/dockerui
 
 https://confluence.jetbrains.com/display/IDEADEV/Inotify+Watches+Limit
-
-# Install some dependencies to build the MIP ----------------------------------
-
-curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer.phar
-alias composer='/usr/local/bin/composer.phar'
-
-sudo apt-get install git nodejs npm nodejs-legacy php5 php5-sqlite
-
-sudo npm install -g bower grunt-cli
 
 # -----------------------------------------------------------------------------
 
