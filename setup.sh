@@ -19,11 +19,14 @@ cd $(get_script_dir)
 
 ANSIBLE_OPTS="-e user=$USER -e user_home=$HOME $ANSIBLE_OPTS -e play_dir=$(pwd)"
 
-PS3='Select your role: '
-options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
-select opt in "${options[@]}"
+role=$1
+if [ -z "$role" ]; then
+  PS3='Select your role: '
+  options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
+  select role in "${options[@]}"
+end
 do
-    case $opt in
+    case $role in
         "Backend developer")
             ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=backend_dev"
             break
@@ -41,18 +44,20 @@ do
             break
             ;;
         "All")
-        ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=fish"
             break
             ;;
         *) echo invalid option;;
     esac
 done
 
-PS3='Installation type: '
-install_options=("Standard" "Hipster")
-select opt in "${install_options[@]}"
+install=$2
+if [ -z "$install" ]; then
+  PS3='Installation type: '
+  install_options=("Standard" "Hipster")
+  select install in "${install_options[@]}"
+end
 do
-    case $opt in
+    case $install in
         "Standard")
             ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ --skip-tags=virtualbox $@ \
   setup.yml

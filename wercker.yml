@@ -10,6 +10,7 @@ build:
   steps:
     - script:
         name: Test full installation for developers
+        sudo: yes
         code: |
           ./common/scripts/bootstrap.sh
           ./setup.sh All Standard
