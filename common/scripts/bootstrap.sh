@@ -14,26 +14,23 @@ get_script_dir () {
 
 ROOT=$(get_script_dir)
 cd $ROOT
-SUDO="sudo"
-if [ ! -z "$WERCKER_STEP_ID" ]; then
-  SUDO=""
-fi
+
 [ -x /usr/local/bin/ansible ] || [ -x /usr/bin/ansible ] || (
 
   # Install Ansible
   [ -x /usr/bin/add-apt-repository ] && (
-    $SUDO add-apt-repository ppa:ansible/ansible
-    $SUDO apt-get update
-    $SUDO apt-get install -y ansible
+    sudo add-apt-repository ppa:ansible/ansible
+    sudo apt-get update
+    sudo apt-get install -y ansible
   ) || (
-    $SUDO apt-get install -y git python-setuptools python-yaml python-jinja2 python-paramiko python-keyczar
-    $SUDO apt-get install -y python-pip || $SUDO -H easy_install pip
-    $SUDO -H pip install -r requirements.txt
+    sudo apt-get install -y git python-setuptools python-yaml python-jinja2 python-paramiko python-keyczar
+    sudo apt-get install -y python-pip || sudo -H easy_install pip
+    sudo -H pip install -r requirements.txt
   )
 )
 
 if [ "$1" != "--skip-git-crypt" ]; then
-  [ -x /usr/bin/git ] || $SUDO apt-get install -y git
+  [ -x /usr/bin/git ] || sudo apt-get install -y git
 
   [ -x /usr/bin/git-crypt ] || (
     echo "Please enter the sudo password for this local computer to install git-crypt"
