@@ -4,20 +4,14 @@ box: ubuntu:16.04
 # Read more about pipelines on our dev center
 # http://devcenter.wercker.com/docs/pipelines/index.html
 build:
-  steps:
-    - script:
-        name: Nothing to do
-        code: |
-          echo "Build..."
-deploy:
     # Steps make up the actions in your pipeline
     # Read more about steps on our dev center:
     # http://devcenter.wercker.com/docs/steps/index.html
   steps:
     - script:
         name: Test full installation for developers
-        sudo: yes
         code: |
+          alias sudo=""
           ./common/scripts/bootstrap.sh
           ./setup.sh All Standard
           ./setup.sh All Sipster
