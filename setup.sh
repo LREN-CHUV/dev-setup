@@ -83,7 +83,11 @@ shift
 
 SETUP_OPTS="--skip-tags=virtualbox"
 if [ "$1" == "skip_docker" ]; then
-  SETUP_OPTS="--skip-tags=virtualbox,docker"
+  SETUP_OPTS="%SETUP_OPTS,docker"
+  shift
+fi
+if [ "$1" == "skip_yed" ]; then
+  SETUP_OPTS="%SETUP_OPTS,yed"
   shift
 fi
 remaining_opts="$@"

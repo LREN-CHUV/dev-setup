@@ -26,5 +26,5 @@ test:
         - pre-commit install
         - pre-commit run --all-files
         - ./common/scripts/bootstrap.sh --skip-git-crypt
-        - ./setup.sh All Standard skip_docker
+        - ./setup.sh All Standard skip_docker skip_yed
         - ./setup.sh All Hipster

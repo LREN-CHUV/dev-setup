@@ -125,41 +125,50 @@
         - frontend_dev
         - algorithms_dev
         - sysadmin
+        - docker-compose
 
     - role: captain
       tags:
         - backend_dev
         - algorithms_dev
         - sysadmin
+        - captain
 
     - role: java
       tags:
         - backend_dev
+        - java
 
     - role: maven
       tags:
         - backend_dev
+        - maven
 
     - role: sbt-extras
       tags:
         - backend_dev
+        - sbt
 
     - role: nodejs
       tags:
         - backend_dev
         - frontend_dev
+        - nodejs
 
     - role: chrome
       tags:
         - backend_dev
         - frontend_dev
+        - chrome
 
     - role: yed
       tags:
         - backend_dev
         - frontend_dev
+        - yed
 
     - role: vagrant
       tags:
         - backend_dev
         - sysadmin
+        - vagrant
