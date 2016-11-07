@@ -24,7 +24,7 @@ if [ -z "$role" ]; then
   PS3='Select your role: '
   options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
   select role in "${options[@]}"
-end
+fi
 do
     case $role in
         "Backend developer")
@@ -55,7 +55,7 @@ if [ -z "$install" ]; then
   PS3='Installation type: '
   install_options=("Standard" "Hipster")
   select install in "${install_options[@]}"
-end
+fi
 do
     case $install in
         "Standard")
