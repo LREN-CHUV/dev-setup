@@ -45,10 +45,10 @@ perform_install() {
   fi
   case $install in
       "Standard")
-          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ --skip-tags=virtualbox $@ setup.yml
+          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ --skip-tags=virtualbox $ANSIBLE_OPTS setup.yml
           ;;
       "Hipster")
-          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS $@ hipster-setup.yml
+          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS hipster-setup.yml
           ;;
         *)
           echo invalid option
@@ -63,9 +63,8 @@ cd $(get_script_dir)
 
 [ -d roles/docker/tasks ] || ./after-git-clone.sh
 
-ANSIBLE_OPTS="-e user=$USER -e user_home=$HOME $ANSIBLE_OPTS -e play_dir=$(pwd)"
-
 role=$1
+shift
 if [ -z "$role" ]; then
   PS3='Select your role: '
   options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
@@ -77,7 +76,11 @@ else
   select_role $role
 fi
 
-install=$2
+install=$1
+shift
+remaining_opts="$@"
+ANSIBLE_OPTS=${ANSIBLE_OPTS:-"$remaining_opts"}
+ANSIBLE_OPTS="-e user=$USER -e user_home=$HOME $ANSIBLE_OPTS -e play_dir=$(pwd) $ANSIBLE_OPTS"
 if [ -z "$install" ]; then
   PS3='Installation type: '
   install_options=("Standard" "Hipster")
