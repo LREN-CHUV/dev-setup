@@ -16,42 +16,44 @@ select_role() {
   case $role in
       "Backend developer")
           ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=backend_dev"
-          break
           ;;
       "Frontend developer")
           ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=frontend_dev"
-          break
           ;;
       "Algorithms developer")
           ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=algorithms_dev"
-          break
           ;;
       "System administrator")
           ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=sysadmin"
-          break
           ;;
       "All")
-          break
           ;;
-      *) echo invalid option;;
+      *)
+          echo invalid option
+          exit 1
+          ;;
   esac
 
 }
 
 perform_install() {
   local install=$1
+  local ANSIBLE_PLAYBOOK="ansible-playbook --ask-become-pass"
+  # Do not ask password on CircleCI
+  if [ -z "$CIRCLE_USERNAME" ]; then
+    local ANSIBLE_PLAYBOOK="ansible-playbook"
+  fi
   case $install in
       "Standard")
-          ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ --skip-tags=virtualbox $@ \
-setup.yml
-          break
+          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ --skip-tags=virtualbox $@ setup.yml
           ;;
       "Hipster")
-          ansible-playbook --ask-become-pass -i envs/local/etc/ansible/ $ANSIBLE_OPTS $@ \
-hipster-setup.yml
-          break
+          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS $@ hipster-setup.yml
           ;;
-      *) echo invalid option;;
+        *)
+          echo invalid option
+          exit 1
+          ;;
   esac
 }
 
