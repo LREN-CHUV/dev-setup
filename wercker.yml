@@ -14,5 +14,4 @@ build:
           alias sudo=""
           ./common/scripts/bootstrap.sh
           ./setup.sh All Standard
-          ./setup.sh All Sipster
-
+          ./setup.sh All Hipster
