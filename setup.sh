@@ -45,9 +45,11 @@ perform_install() {
   fi
   case $install in
       "Standard")
+          echo "$ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS $SETUP_OPTS setup.yml"
           $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS $SETUP_OPTS setup.yml
           ;;
       "Hipster")
+          echo "$ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS hipster-setup.yml"
           $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS hipster-setup.yml
           ;;
         *)
@@ -79,7 +81,7 @@ fi
 install=$1
 shift
 
-SETUP_OPTS="--skip-tags=virtualbox,docker"
+SETUP_OPTS="--skip-tags=virtualbox"
 if [ "$1" == "skip_docker" ]; then
   SETUP_OPTS="--skip-tags=virtualbox,docker"
   shift
