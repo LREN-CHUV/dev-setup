@@ -46,6 +46,7 @@
       gem:
         name: "{{ item }}"
         state: present
+        executable: "/usr/bin/ruby2.3"
       with_items:
         - rubocop # required for Atom beautify
       tags:

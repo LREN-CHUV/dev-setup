@@ -10,6 +10,9 @@ dependencies:
 
   override:
     - pip install pre-commit ansible-lint
+    - apt-add-repository -y ppa:brightbox/ruby-ng
+    - apt-get update
+    - apt-get install -y ruby2.3
 
 checkout:
   post:
