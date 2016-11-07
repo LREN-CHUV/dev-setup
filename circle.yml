@@ -20,6 +20,6 @@ test:
     override:
         - pre-commit install
         - pre-commit run --all-files
-        - ./common/scripts/bootstrap.sh
+        - ./common/scripts/bootstrap.sh --skip-git-crypt
         - ./setup.sh All Standard
         - ./setup.sh All Hipster
