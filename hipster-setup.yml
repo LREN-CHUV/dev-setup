@@ -42,13 +42,13 @@
         - backend_dev
         - frontend_dev
 
-    - name: Locate Ruby 2
+    - name: Locate Gem for Ruby 2
       set_fact:
-        ruby2_bin: '{{ item }}'
+        ruby2_gem_bin: '{{ item }}'
       with_first_found:
         - files:
-            - ruby2.3
-            - ruby2.2
+            - gem2.3
+            - gem2.2
           paths:
             - /usr/bin
             - /usr/local/bin
@@ -57,7 +57,7 @@
       gem:
         name: "{{ item }}"
         state: present
-        executable: "{{ ruby2_bin }}"
+        executable: "{{ ruby2_gem_bin }}"
       with_items:
         - rubocop # required for Atom beautify
       tags:
