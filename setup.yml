@@ -117,6 +117,7 @@
         - frontend_dev
         - algorithms_dev
         - sysadmin
+        - docker
 
     - role: docker-compose
       tags:
