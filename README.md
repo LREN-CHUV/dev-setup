@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-Apache2.0-blue.svg)](https://github.com/LREN-CHUV/dev-setup/blob/master/LICENSE.md) [![Trello](https://img.shields.io/badge/trello-dev-blue.svg)](https://trello.com/b/4lsExdnC/dev-development-tools)
+[![License](https://img.shields.io/badge/license-Apache2.0-blue.svg)](https://github.com/LREN-CHUV/dev-setup/blob/master/LICENSE.md) [![Trello](https://img.shields.io/badge/trello-dev-blue.svg)](https://trello.com/b/4lsExdnC/dev-development-tools) [![CircleCI](https://circleci.com/gh/LREN-CHUV/dev-setup.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/dev-setup)
 
 # dev-setup
 
