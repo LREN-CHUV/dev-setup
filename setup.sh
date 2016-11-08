@@ -45,12 +45,15 @@ perform_install() {
   fi
   case $install in
       "Standard")
-          echo "$ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS $SETUP_OPTS setup.yml"
-          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS $SETUP_OPTS setup.yml
+          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ \
+            -e play_dir=$(pwd) \
+            -e lib_roles_path="$(pwd)/roles" \ $ANSIBLE_OPTS $SETUP_OPTS setup.yml
           ;;
       "Hipster")
-          echo "$ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS hipster-setup.yml"
-          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ $ANSIBLE_OPTS hipster-setup.yml
+          $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ \
+            -e play_dir=$(pwd) \
+            -e lib_roles_path="$(pwd)/roles" \
+            $ANSIBLE_OPTS hipster-setup.yml
           ;;
         *)
           echo invalid option
