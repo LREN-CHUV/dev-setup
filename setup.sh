@@ -47,7 +47,8 @@ perform_install() {
       "Standard")
           $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ \
             -e play_dir=$(pwd) \
-            -e lib_roles_path="$(pwd)/roles" \ $ANSIBLE_OPTS $SETUP_OPTS setup.yml
+            -e lib_roles_path="$(pwd)/roles" \
+            $ANSIBLE_OPTS $SETUP_OPTS setup.yml
           ;;
       "Hipster")
           $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ \
