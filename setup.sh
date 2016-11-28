@@ -13,7 +13,7 @@ get_script_dir () {
 
 select_role() {
   local role=$1
-  case $role in
+  case "$role" in
       "Backend developer")
           ANSIBLE_OPTS="$ANSIBLE_OPTS --tags=backend_dev"
           ;;
@@ -43,7 +43,7 @@ perform_install() {
   if [ -n "$CIRCLE_USERNAME" ]; then
     local ANSIBLE_PLAYBOOK="ansible-playbook"
   fi
-  case $install in
+  case "$install" in
       "Standard")
           $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ \
             -e play_dir=$(pwd) \
@@ -74,12 +74,13 @@ shift
 if [ -z "$role" ]; then
   PS3='Select your role: '
   options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
-  select role in "${options[@]}"
+  select role in "${options[@]}";
   do
-    select_role $role
+    select_role "$role"
+    break
   done
 else
-  select_role $role
+  select_role "$role"
 fi
 
 install=$1
@@ -100,10 +101,11 @@ ANSIBLE_OPTS="-e user=$USER -e user_home=$HOME $ANSIBLE_OPTS -e play_dir=$(pwd) 
 if [ -z "$install" ]; then
   PS3='Installation type: '
   install_options=("Standard" "Hipster")
-  select install in "${install_options[@]}"
+  select install in "${install_options[@]}";
   do
-    perform_install $install
+    perform_install "$install"
+    break
   done
 else
-  perform_install $install
+  perform_install "$install"
 fi

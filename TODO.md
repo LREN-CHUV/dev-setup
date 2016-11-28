@@ -81,3 +81,5 @@ sudo -H npm install -g ungit
 https://github.com/TomasTomecek/sen
 
 https://github.com/nvbn/thefuck/
+
+https://github.com/junegunn/fzf
