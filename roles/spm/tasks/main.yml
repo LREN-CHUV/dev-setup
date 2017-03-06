@@ -1,0 +1,132 @@
+---
+
+- name: Check that Matlab is installed
+  stat: path={{ matlab_root }}
+  register: matlab_path
+  tags: matlab
+
+- name: Stop if Matlab is not installed
+  fail: msg='Please install MATLAB {{ matlab_version }}'
+  when: not (matlab_path.stat.isdir is defined) or (not matlab_path.stat.isdir)
+  tags: matlab
+
+- name: Install Matlab Python API
+  command: '{{ matlab_python }} setup.py install'
+  args:
+    chdir: '{{ matlab_root }}/extern/engines/python/'
+    creates: '{{ matlab_python_library_path }}/matlab/engine/matlabengine.py'
+  when: matlab_python_api
+  tags: matlab
+
+- name: Fix stdc library used by Matlab
+  file:
+    src: '/usr/lib/x86_64-linux-gnu/libstdc++.so.6'
+    dest: '/usr/local/MATLAB/{{ matlab_version }}/sys/os/glnxa64/libstdc++.so.6'
+    state: link
+    force: yes
+  when: matlab_python_api and (ansible_lsb.id == 'Ubuntu') and (ansible_lsb.release == '16.04')
+  tags: matlab
+
+- name: Check that Matlab Python API is running
+  command: |
+    {{ matlab_python }} -c '
+    import math
+    import matlab.engine
+    eng = matlab.engine.start_matlab()
+    ret = eng.sqrt(4.0)
+    print(ret)
+    eng.exit()'
+  env:
+    PYTHONPATH: '{{ matlab_python_library_path }}'
+  changed_when: False
+  when: matlab_python_api
+  tags: matlab
+
+- name: Re-read local facts
+  setup:
+    filter: ansible_local
+    fact_path: "{{ util_local_facts_directory|default('/etc/ansible/facts.d') }}"
+
+- name: Detect first installation for SPM
+  tags: spm
+  set_fact:
+    spm_fact_first_installation: '{{ not (ansible_local.spm is defined) or not (ansible_local.spm.general.spm_version is defined) }}'
+
+- name: Detect version upgrade for SPM
+  tags: spm
+  set_fact:
+    spm_fact_upgrade_installation: '{{ (ansible_local.spm is defined) and (ansible_local.spm.general.spm_version is defined) and (ansible_local.spm.general.spm_version != spm_version) and (ansible_local.spm.general.spm_revision != spm_revision) }}'
+
+- include: install.yml
+  when: spm_fact_first_installation or spm_fact_upgrade_installation
+  tags: spm
+
+# Always reinstall toolbox if SPM changes, this is to keep facts up-to-date
+- name: Init detect first installation for SPM toolboxes
+  tags: spm
+  set_fact:
+    spm_toolbox_fact_first_installation: '{{ spm_fact_first_installation }}'
+
+- name: Init detect version upgrade for SPM toolboxes
+  tags: spm
+  set_fact:
+    spm_toolbox_fact_upgrade_installation: '{{ spm_fact_upgrade_installation }}'
+
+- name: Detect first installation for SPM toolboxes
+  tags: spm
+  set_fact:
+    spm_toolbox_fact_first_installation: "{{ spm_toolbox_fact_first_installation or not (ansible_local.spm is defined) or not ((item.name + '_version') in ansible_local.spm.general.toolbox) }}"
+  with_items: "{{ spm_toolbox }}"
+
+- name: Detect version upgrade for SPM toolboxes
+  tags: spm
+  set_fact:
+    spm_toolbox_fact_upgrade_installation: "{{ spm_toolbox_fact_upgrade_installation or ( (ansible_local.spm is defined) and ((item.name + '_version') in ansible_local.spm.general.toolbox) and (ansible_local.spm.general.toolbox[item.name + '_version'] != item.version) ) }}"
+  with_items: "{{ spm_toolbox }}"
+
+- include: install_toolbox.yml
+  when: spm_toolbox_fact_first_installation or spm_toolbox_fact_upgrade_installation
+  tags: spm
+
+  # Always reinstall templates if SPM or its toolboxes changes, this is to keep facts up-to-date
+- name: Init detect first installation for SPM templates
+  tags: spm
+  set_fact:
+    spm_template_fact_first_installation: '{{ spm_toolbox_fact_first_installation }}'
+
+- name: Init detect version upgrade for SPM templates
+  tags: spm
+  set_fact:
+    spm_template_fact_upgrade_installation: '{{ spm_toolbox_fact_upgrade_installation }}'
+
+- name: Detect first installation for SPM templates
+  tags: spm
+  set_fact:
+    spm_template_fact_first_installation: "{{ spm_template_fact_first_installation or not (ansible_local.spm is defined) or not ((item.name + '_version') in ansible_local.spm.general.template) }}"
+  with_items: "{{ spm_template }}"
+
+- name: Detect version upgrade for SPM templates
+  tags: spm
+  set_fact:
+    spm_template_fact_upgrade_installation: "{{ spm_template_fact_upgrade_installation or ( (ansible_local.spm is defined) and ((item.name + '_version') in ansible_local.spm.general.template) and (ansible_local.spm.general.template[item.name + '_version'] != item.version) ) }}"
+  with_items: "{{ spm_template }}"
+
+- include: install_template.yml
+  when: spm_template_fact_first_installation or spm_template_fact_upgrade_installation
+  tags: spm
+
+- name: Check that SPM is running
+  command: |
+    {{ matlab_python }} -c '
+    import matlab.engine
+    eng = matlab.engine.start_matlab()
+    eng.addpath("/opt/spm12")
+    eng.spm("Dir")
+    eng.exit()'
+  env:
+    PYTHONPATH: '{{ matlab_python_library_path }}'
+  changed_when: False
+  when: matlab_python_api
+  tags:
+    - matlab
+    - spm

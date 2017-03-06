@@ -5,27 +5,41 @@ airflow_db_marathon_id: /data-factory/airflow/airflow-db
 # Pin the database to a particular host as it needs to store its files in a known place. The hostname should be the name known by Marathon / Mesos
 airflow_db_marathon_host: '{{ inventory_hostname }}'
 
-# The user running the Docker container for mysql, default to '999' (mysql user in the mysql docker container)
+# The user running the Docker container for Postgres, default to '999' (postgres user in the Postgres docker container)
+# TODO: use user remapping when this functionality will be available per run (not possible today with Docker 1.12)
 airflow_db_docker_user: '999'
 
-# One of mysql, mariadb
-airflow_db_image: 'mariadb'
-airflow_db_version: "{{ mariadb_version }}"
+# postgresql
+postgres_version: "9.5.4"
+airflow_db_image: 'postgres'
+airflow_db_version: "{{ postgres_version }}"
+postgres_is_ready: "/usr/local/bin/pg_isready"
+airflow_db_is_ready: "{{ postgres_is_ready }}"
 
 airflow_db_cpus: 0.5
 airflow_db_mem: 512.0
 
 # Port exposed by Marathon, must be in the range [4000, 5000[, [31000,32000[
 airflow_db_port: 4306
+airflow_db_host: '{{ airflow_db_marathon_host }}'
+airflow_db_name: airflow
+airflow_db_admin_user: postgres
 # TO FILL - airflow_db_root_password:
 airflow_db_user: airflow
 # TO FILL - airflow_db_password: airflow
 
-airflow_db_data_dir: /srv/docker/airflow_db/data
-airflow_db_docker_entrypoint_dir: /srv/docker/airflow_db/docker-entrypoint-initdb.d
+# Hint in Marathon listing all the databases running in this Postgres server
+airflow_db_databases: "{{ airflow_db_name }}"
 
-# Additional databases to create. It should contain the following properties: name, user, password
-airflow_db_additional_databases: []
+airflow_db_data_dir: /srv/docker/airflow_db/data
+
+# Force cleanup of the Airflow database. Please never use that in production!
+airflow_db_cleanup: false
+
+airflow_db_deb_packages:
+  - python-pip
+  - python-psycopg2
+  - curl
 
 # URL to marathon master internal to the current cluster. You need to ensure that Ansible can reach that URL.
 internal_marathon_url: http://localhost:5080

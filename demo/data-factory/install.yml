@@ -5,60 +5,49 @@
 # Installs _the_ world
 #
 
-- include: ../../common/playbooks/base-system.yml
+- include: ../../common/playbooks/infrastructure/base-system.yml
 
-- include: ../../common/playbooks/zookeeper.yml
+- include: ../../common/playbooks/infrastructure/zookeeper.yml
 
-- include: ../../common/playbooks/mesos-leader.yml
+- include: ../../common/playbooks/infrastructure/mesos-leader.yml
 
-- include: ../../common/playbooks/mesos-mixed.yml
+- include: ../../common/playbooks/infrastructure/mesos-mixed.yml
 
-- include: ../../common/playbooks/mesos-follower.yml
+- include: ../../common/playbooks/infrastructure/mesos-follower.yml
 
-- hosts: airflow
+- include: ../../common/playbooks/data-factory/airflow.yml
+
+- hosts: airflow-agent
   become: yes
   vars_files:
     - "{{ play_dir }}/vars/common.yml"
     - "{{ play_dir }}/vars/versions.yml"
     - "{{ play_dir }}/vars/airflow.yml"
 
-  pre_tasks:
+  tasks:
 
-    - name: Setup Matlab library for Python
-      command: python ./setup.py install
-      args:
-        chdir: /usr/local/MATLAB/R2015b/extern/engines/python
-      tags: ['airflow', 'matlab']
+    - name: Create group for Airflow
+      group:
+        name: '{{ airflow_group }}'
+        state: present
 
-  roles:
-
-    - role: airflow-database
-      tags: ['airflow']
-
-    - role: airflow
-      tags: ['airflow']
-
-    - role: audit-deployment
-      installed_component: airflow
-      tags: ['airflow']
-
-  post_tasks:
+    - name: Create user for Airflow
+      user:
+        name: '{{ airflow_user }}'
+        group: '{{ airflow_group }}'
+        home: '{{ airflow_home }}'
 
     - name: Create folders for data and scripts
       file: path='{{ item }}' state=directory owner=airflow
       with_items:
-        - /data/incoming/20160713
+        - /data/demo
+        - /data/ehr_demo
 
-    - name: Get meta-extract code
-      git:
-        repo: https://github.com/LREN-CHUV/meta-extract.git
-        dest: /home/airflow/meta-extract
-        depth: 1
-
-    - name: Get some MRI data
+    - name: Get some MRI data from public datasets (it takes time)
       git:
         repo: https://github.com/dcunited001/mri-scans.git
-        dest: /data/incoming/20160713
+        version: master
+        dest: /data/demo
         depth: 1
 
 - hosts: cbrain
