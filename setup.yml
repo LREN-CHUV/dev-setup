@@ -64,6 +64,7 @@
         - httpie
         - wharfee
         - pre-commit
+        - twine
       tags:
         - backend_dev
         - frontend_dev
