@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-Apache2.0-blue.svg)](https://github.com/LREN-CHUV/dev-setup/blob/master/LICENSE.md) [![Trello](https://img.shields.io/badge/trello-dev-blue.svg)](https://trello.com/b/4lsExdnC/dev-development-tools) [![CircleCI](https://circleci.com/gh/LREN-CHUV/dev-setup.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/dev-setup)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/LREN-CHUV/dev-setup/blob/master/LICENSE.md) [![Trello](https://img.shields.io/badge/trello-dev-blue.svg)](https://trello.com/b/4lsExdnC/dev-development-tools) [![CircleCI](https://circleci.com/gh/LREN-CHUV/dev-setup.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/dev-setup) [![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html)
 
 # dev-setup
 

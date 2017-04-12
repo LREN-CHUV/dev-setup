@@ -37,6 +37,7 @@
         - texlive-fonts-recommended
         - texlive-latex-recommended
         - jq
+        - shellcheck
       tags:
         - backend_dev
         - frontend_dev
@@ -65,6 +66,7 @@
         - wharfee
         - pre-commit
         - twine
+        - bumpversion
       tags:
         - backend_dev
         - frontend_dev

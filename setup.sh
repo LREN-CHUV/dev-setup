@@ -1,13 +1,15 @@
 #!/bin/bash
+set -e
 
 get_script_dir () {
      SOURCE="${BASH_SOURCE[0]}"
      while [ -h "$SOURCE" ]; do
+          # shellcheck disable=SC2091
           DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
           SOURCE="$( readlink "$SOURCE" )"
           [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
      done
-     $( cd -P "$( dirname "$SOURCE" )" )
+     cd -P "$( dirname "$SOURCE" )"
      pwd
 }
 
@@ -45,14 +47,16 @@ perform_install() {
   fi
   case "$install" in
       "Standard")
+          # shellcheck disable=SC2086
           $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ \
-            -e play_dir=$(pwd) \
+            -e play_dir="$(pwd)" \
             -e lib_roles_path="$(pwd)/roles" \
             $ANSIBLE_OPTS $SETUP_OPTS setup.yml
           ;;
       "Hipster")
+          # shellcheck disable=SC2086
           $ANSIBLE_PLAYBOOK -i envs/local/etc/ansible/ \
-            -e play_dir=$(pwd) \
+            -e play_dir="$(pwd)" \
             -e lib_roles_path="$(pwd)/roles" \
             $ANSIBLE_OPTS hipster-setup.yml
           ;;
@@ -63,14 +67,14 @@ perform_install() {
   esac
 }
 
-cd $(get_script_dir)
+cd "$(get_script_dir)"
 
 ./common/scripts/bootstrap.sh --skip-git-crypt
 
 [ -d roles/docker/tasks ] || ./after-git-clone.sh
 
 role=$1
-shift
+
 if [ -z "$role" ]; then
   PS3='Select your role: '
   options=("Backend developer" "Frontend developer" "Algorithms developer" "System administrator" "All")
@@ -80,11 +84,14 @@ if [ -z "$role" ]; then
     break
   done
 else
+  shift
   select_role "$role"
 fi
 
 install=$1
-shift
+if [ -n "$1" ]; then
+  shift
+fi
 
 SETUP_OPTS="--skip-tags=virtualbox"
 if [ "$1" == "skip_docker" ]; then
@@ -95,7 +102,7 @@ if [ "$1" == "skip_yed" ]; then
   SETUP_OPTS="$SETUP_OPTS,yed"
   shift
 fi
-remaining_opts="$@"
+remaining_opts="$*"
 ANSIBLE_OPTS=${ANSIBLE_OPTS:-"$remaining_opts"}
 ANSIBLE_OPTS="-e user=$USER -e user_home=$HOME $ANSIBLE_OPTS -e play_dir=$(pwd) $ANSIBLE_OPTS"
 if [ -z "$install" ]; then
