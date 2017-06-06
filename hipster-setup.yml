@@ -47,8 +47,11 @@
         ruby2_gem_bin: '{{ item }}'
       with_first_found:
         - files:
+            - gem2.5
+            - gem2.4
             - gem2.3
             - gem2.2
+            - gem2.1
           paths:
             - /usr/bin
             - /usr/local/bin
