@@ -27,7 +27,8 @@
     docker_port_mappings:
       - hostPort: "{{ postgresraw_ui_admin_port }}"
         containerPort: 5555
-        name: 'http-admin'
+        protocol: 'tcp'
+        name: 'http'
     container_volumes:
       - containerPath: '/data'
         hostPath: "{{ postgresraw_ui_pg_data_folder }}"
@@ -48,7 +49,7 @@
     wait_timeout: 600
     health_checks:
       - protocol: "{% if marathon_version | version_compare('1.4', '>=') %}MESOS_HTTP{% else %}HTTP{% endif %}"
-        port: "{{ postgresraw_ui_admin_port }}"
+        portIndex: 0
         path: '/'
         gracePeriodSeconds: 300
         intervalSeconds: 60

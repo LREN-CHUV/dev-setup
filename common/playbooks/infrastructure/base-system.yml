@@ -5,15 +5,29 @@
   vars_files:
     - "{{ play_dir }}/vars/common.yml"
     - "{{ play_dir }}/vars/versions.yml"
+    - "{{ play_dir }}/vars/infrastructure/base-system.yml"
 
   roles:
-    - role: base-system
-      tags: ['runtimes']
 
     # Setup etckeeper and force it to use Git
     - role: etckeeper
-      tags: ['runtimes']
+      tags: ['infra', 'infrastructure', 'runtimes']
+
+    - role: ubuntu-locales
+      tags: ['locales', 'infrastructure', 'runtimes']
+      when: ansible_distribution == "Ubuntu"
+
+    - role: fqdn
+      when: fqdn is defined or hostname is defined
+      tags: ['infra', 'infrastructure', 'runtimes']
+
+    - role: proxy
+      when: proxy_http is defined and proxy_http != 'http://proxy.tld:8080'
+      tags: ['proxy', 'infra', 'infrastructure', 'runtimes']
+
+    - role: base-system
+      tags: ['infra', 'infrastructure', 'runtimes']
 
     - role: audit-deployment
-      installed_component: base-system
-      tags: ['runtimes']
+      installed_component: infrastructure-base-system
+      tags: ['infra', 'infrastructure', 'runtimes']

@@ -1,6 +1,11 @@
-# Airflow demo
+# Demo of MIP Data Factory featuring Airflow
 
-Demonstration of Airflow running inside a Vagrant Virtual machine.
+This is a demonstration of the MIP Data Factory focusing on its workflow application, Airflow.
+
+The demonstration runs inside a Vagrant Virtual machine and .
+
+, ETL pipelines for medical data and
+
 
 ## Installation
 
@@ -50,8 +55,8 @@ Marathon can be accessed on [localhost:15080](http://localhost:15080)
 
 ## Testing
 
-Example data is provided in /data/demo folder inside the VM, but the preprocessing pipelines
-cannot work at the moment as they require Matlab installed.
+Example data is provided in /data/demo folder inside the VM, but you need Matlab installed
+in the virtual machine to execute the [SPM 12](http://www.fil.ion.ucl.ac.uk/spm) based preprocessing pipelines.
 
 ## For developers
 
@@ -67,7 +72,7 @@ cannot work at the moment as they require Matlab installed.
 | [mri-meta-db](https://github.com/HBPMedical/mri-meta-db) | [![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) | [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/LREN-CHUV/mri-meta-db/blob/master/LICENSE) |   | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9adcf4cbd730472386d0e71ab27b9b6b)](https://www.codacy.com/app/mirco-nasuti/mri-meta-db?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/mri-meta-db&amp;utm_campaign=Badge_Grade) [![CircleCI](https://circleci.com/gh/LREN-CHUV/mri-meta-db.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/mri-meta-db) |
 | [mri-preprocessing-pipeline](https://github.com/HBPMedical/mri-preprocessing-pipeline) | [![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) | [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://github.com/HBPMedical/mri-preprocessing-pipeline/blob/master/LICENSE) |   |   |
 | [airflow-imaging-plugins](https://github.com/HBPMedical/airflow-imaging-plugins) | [![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) | [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/HBPMedical/airflow-imaging-plugins/blob/master/LICENSE) |   | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/7a9c796392e4420495ee1fabd0fce9ae)](https://www.codacy.com/app/hbp-mip/airflow-imaging-plugins?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/airflow-imaging-plugins&amp;utm_campaign=Badge_Grade) |
-| [airflow-mri-preprocessing-dags](https://github.com/HBPMedical/airflow-mri-preprocessing-dags) | [![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) | [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/HBPMedical/airflow-mri-preprocessing-dags/blob/master/LICENSE) |   | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8c5c9dc3cfb8492f870369c973f3cc8c)](https://www.codacy.com/app/hbp-mip/airflow-mri-preprocessing-dags?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/airflow-mri-preprocessing-dags&amp;utm_campaign=Badge_Grade) |
+| [data-factory-airflow-dags](https://github.com/HBPMedical/data-factory-airflow-dags) | [![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) | [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/HBPMedical/data-factory-airflow-dags/blob/master/LICENSE) |   | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8c5c9dc3cfb8492f870369c973f3cc8c)](https://www.codacy.com/app/hbp-mip/data-factory-airflow-dags?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/data-factory-airflow-dags&amp;utm_campaign=Badge_Grade) |
 
 ### Configuration for Ansible inventory
 

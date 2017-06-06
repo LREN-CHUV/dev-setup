@@ -16,16 +16,18 @@ akka {
     maximum-payload-bytes = 10000000 bytes
     enabled-transports = ["akka.remote.netty.tcp"]
     netty.tcp {
-      hostname = {{ woken_marathon_host }} # external (logical) hostname
+      hostname = {{ woken_host }} # external (logical) hostname
       port = {{ woken_akka_port }} # external (logical) port
 
 {% if woken_docker_network == 'BRIDGE' %}
+      # With bridge networking, bind to localhost, then let Docker do the NAT translation
       bind-hostname = localhost     # internal (bind) hostname
       bind-port = 8088              # internal (bind) port
 {% else %}
-      bind-hostname = "{{ woken_marathon_host }}"
-      bind-port = {{ woken_akka_port }} # Network interface will be bound to the woken_akka_port port,
-                     # and remoting protocol will expect messages sent to the bound port
+      bind-hostname = "0.0.0.0"
+      # Network interface will be bound to the woken_akka_port port,
+      # and remoting protocol will expect messages sent to the bound port
+      bind-port = ""
 {% endif %}
 
       message-frame-size =  10000000b
@@ -38,9 +40,10 @@ akka {
 
     seed-nodes = [
 {% if woken_docker_network == 'BRIDGE' %}
+      # With bridge networking, bind to localhost, then let Docker do the NAT translation
       "akka.tcp://woken@localhost:8088"
 {% else %}
-      "akka.tcp://woken@{{ woken_marathon_host }}:{{ woken_akka_port }}"
+      "akka.tcp://woken@{{ woken_host }}:{{ woken_akka_port }}"
 {% endif %}
     ]
 
@@ -76,12 +79,12 @@ jobs {
 {% else %}
   ldsmDb = "ldsm"
 {% endif %}
-  resultDb = "analytics"
+  resultDb = "woken"
   metaDb = "metadata"
 }
 
 db {
-  analytics {
+  woken {
     jdbc_driver="{{ woken_result_db_jdbc_driver }}"
     jdbc_jar_path="{{ woken_result_db_jdbc_jar }}"
     jdbc_url="{{ woken_result_db_jdbc_url }}"
@@ -124,7 +127,7 @@ defaultSettings {
 {% else %}
     inDb = "ldsm"
 {% endif %}
-    outDb = "analytics"
+    outDb = "woken"
     metaDb = "metadata"
     mainTable = "{{ woken_main_table }}"
 

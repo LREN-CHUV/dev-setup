@@ -13,8 +13,8 @@
   become: yes
   lineinfile:
     dest: /etc/hosts
-    regexp: "^{{ hostvars[item].private_ipv4 }} {{ item }}{% if use_host_domain %} {{ item }}.{{ host_domain }}{% endif %}$"
-    line: "{{ hostvars[item].private_ipv4 }} {{ item }}{% if use_host_domain %} {{ item }}.{{ host_domain}}{% endif %}"
+    regexp: "^{{ hostvars[item].private_ipv4 }} {{ hostvars[item].hostname }} {{ hostvars[item].fqdn | default(hostvars[item].ansible_fqdn) }}$"
+    line: "{{ hostvars[item].private_ipv4 }} {{ hostvars[item].hostname }} {{ hostvars[item].fqdn | default(hostvars[item].ansible_fqdn) }}"
     state: present
   when: hostvars[item].private_ipv4 is defined
   with_items: "{{ groups['all'] }}"
@@ -28,6 +28,34 @@
   with_items:
     - '^127\.0\.\d+\.\d+(\s+)(?i){{ inventory_hostname }}.*'
     - '^::1(\s+)(?i){{ inventory_hostname }}.*'
+  when: do_hosts_cleanup
+
+- name: Add localhost to hosts file
+  become: yes
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.0\.1.*$'
+    line: "127.0.0.1 localhost {{ inventory_hostname_short }}"
+    state: present
+  when: always_add_localhost
+
+- name: Add ip6 localhost to hosts file
+  become: yes
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^::1(\s+).*$'
+    line: "::1 ip6-localhost ip6-loopback"
+    state: present
+  when: always_add_localhost
+
+- name: Add inventory hostname to hosts file
+  become: yes
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.1\.1(\s+).*$'
+    line: "127.0.1.1 {{ inventory_hostname_short }}"
+    state: present
+  when: always_add_localhost
 
 - name: Ping APT proxy
   wait_for:
@@ -39,10 +67,12 @@
   ignore_errors: true
   when: apt_proxy_host is defined
 
-- template:
+- name: Setup APT proxy
+  template:
     src: apt-proxy.j2
     dest: /etc/apt/apt.conf.d/01proxy
   when: apt_proxy_host is defined and apt_proxy_status.state == 'started'
 
-- file: path='/etc/apt/apt.conf.d/01proxy' state='absent'
+- name: Remove APT proxy
+  file: path='/etc/apt/apt.conf.d/01proxy' state='absent'
   when: apt_proxy_host is not defined or apt_proxy_status.state != 'started'

@@ -1,0 +1,20 @@
+---
+
+- hosts: portal-frontend
+  become: yes
+  gather_facts: yes
+  vars_files:
+    - "{{ play_dir }}/vars/common.yml"
+    - "{{ play_dir }}/vars/versions.yml"
+    - "{{ play_dir }}/vars/infrastructure/endpoints.yml"
+    - "{{ play_dir }}/vars/web-analytics/endpoints.yml"
+    - "{{ play_dir }}/vars/web-analytics/portal-frontend.yml"
+
+  roles:
+
+    - role: portal-frontend
+      tags: ['portal-frontend', 'portal', 'web-analytics', 'marathon-app']
+
+    - role: audit-deployment
+      installed_component: web-analytics-portal-frontend
+      tags: ['portal-frontend', 'portal', 'web-analytics', 'marathon-app']

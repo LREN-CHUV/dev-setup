@@ -1,55 +1,13 @@
 ---
 
-# Mesos stack
+- include: infrastructure/setup.yml
 
-- include: infrastructure/base-system.yml
+- include: hospital-database/setup.yml
 
-- include: infrastructure/zookeeper.yml
+- include: reference/setup.yml
 
-- include: infrastructure/mesos-leader.yml
+- include: data-factory/setup.yml
 
-- include: infrastructure/mesos-mixed.yml
+- include: algorithm-factory/setup.yml
 
-- include: infrastructure/mesos-follower.yml
-
-# /Mesos stack
-
-- include: infrastructure/cleanup.yml
-
-- include: mip-services.yml
-
-# Reference databases
-
-- include: science-database.yml
-
-- include: denodo.yml
-
-# /Reference databases
-
-# Data Factory
-
-- include: data-factory/airflow.yml
-
-# /Data Factory
-
-# Algorithm Factory
-
-- include: algorithm-factory/analytics-database.yml
-
-- include: algorithm-factory/woken.yml
-
-# /Algorithm Factory
-
-# Web Exploration and Analytics
-
-- include: portal/portal-database.yml
-
-- include: meta-database.yml
-
-- include: portal/portal-backend.yml
-
-- include: portal/portal-frontend.yml
-
-# /Web Exploration and Analytics
-
-- include: dev.yml
+- include: web-analytics/setup.yml

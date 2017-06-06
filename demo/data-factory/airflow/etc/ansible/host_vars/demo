@@ -10,10 +10,6 @@ ip_address: '192.168.34.66'
 airflow_db_admin_password: 'MySecretPassword'
 airflow_db_password: 'airflowdb'
 
-mri_db_user: mri
-mri_db_password: mripwd
-mri_db_admin_password: "{{ airflow_db_admin_password }}"
-
 data_catalog_db_password: 'datacatalogpwd'
 data_catalog_db_admin_password: "{{ airflow_db_admin_password }}"
 

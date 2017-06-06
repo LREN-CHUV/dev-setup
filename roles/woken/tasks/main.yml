@@ -1,7 +1,7 @@
 ---
 
 # Default user in Docker appears as user 999 outside
-- name: Create directory
+- name: Create woken configuration directory
   file: state=directory path={{ woken_config_dir }} mode=0700 owner=999 group=999
   become: True
 
@@ -73,9 +73,11 @@
     docker_port_mappings:
       - hostPort: "{{ woken_http_port }}"
         containerPort: 8087
+        protocol: 'tcp'
         name: 'http'
       - hostPort: "{{ woken_akka_port }}"
         containerPort: 8088
+        protocol: 'tcp'
         name: 'akka'
     docker_parameters: '{{ woken_docker_parameters }}'
     container_volumes:

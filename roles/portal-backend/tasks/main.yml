@@ -27,6 +27,7 @@
     docker_port_mappings:
       - hostPort: "{{ portal_backend_port }}"
         containerPort: 8080
+        protocol: 'tcp'
         name: 'http'
       - hostPort: "{{ portal_backend_akka_port }}"
         containerPort: 4089
@@ -39,12 +40,12 @@
     ports: []
     require_ports: true
     constraints: '{{ portal_backend_marathon_constraints }}'
-    dependencies: ["{{ portal_db_marathon_id }}"]
+    dependencies: '{{ portal_backend_dependencies }}'
     executor: ""
     wait_timeout: 600
     health_checks:
       - protocol: "{% if marathon_version | version_compare('1.4', '>=') %}MESOS_HTTP{% else %}HTTP{% endif %}"
-        port: '{{ portal_backend_port }}'
+        portIndex: 0
         path: '{{ portal_backend_context_path }}/health'
         gracePeriodSeconds: 300
         intervalSeconds: 60

@@ -1,0 +1,45 @@
+---
+
+portal_db_marathon_id: "
+  {%- if 'portal-db' in research_db_companion_bases -%}
+    {{ research_db_marathon_id }}
+  {%- else -%}
+    /web-analytics/portal-db
+  {%- endif -%}
+"
+portal_db_port: "
+  {%- if 'portal-db' in research_db_companion_bases -%}
+    {{ research_db_port }}
+  {%- else -%}
+    31437
+  {%- endif -%}
+"
+portal_db_host: "
+  {%- if 'portal-db' in research_db_companion_bases -%}
+    {{ research_db_host }}
+  {%- else -%}
+    {{ fqdn | default(ansible_fqdn) }}
+  {%- endif -%}
+"
+portal_db_name: portal
+portal_db_admin_user: postgres
+portal_db_user: portal
+
+portal_db_jdbc_url: "jdbc:postgresql://{{ portal_db_host }}:{{ portal_db_port }}/{{ portal_db_name }}"
+
+# Port to use to expose Portal backend to other services in the cluster.
+portal_backend_port: 4480
+portal_backend_akka_port: 4489
+# Prefix path for all services provided by Portal backend
+portal_backend_context_path: ""
+
+internal_portal_backend_server: '{{ fqdn | default(ansible_fqdn) }}:{{ portal_backend_port }}'
+
+# required by portal-frontend
+portal_backend_marathon_id: /web-analytics/portal-backend
+
+portal_frontend_virtual_host: '{{ fqdn | default(ansible_fqdn) }}'
+
+portal_backend_frontend_login_url: "{{ portal_frontend_base_url }}/home"
+portal_backend_frontend_after_login_url: "{{ portal_frontend_base_url }}/services/login/hbp"
+portal_backend_frontend_after_logout_url: "{{ portal_frontend_base_url }}/services/login/hbp"

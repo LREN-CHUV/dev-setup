@@ -9,6 +9,7 @@ get_script_dir () {
      SOURCE="${BASH_SOURCE[0]}"
 
      while [ -h "$SOURCE" ]; do
+          # shellcheck disable=SC2091
           DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
           SOURCE="$( readlink "$SOURCE" )"
           [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
@@ -17,9 +18,14 @@ get_script_dir () {
      pwd
 }
 
-ROOT=$(get_script_dir)
+ROOT="$(get_script_dir)/../.."
+cd "$ROOT"
 
-DATACENTER=federation
+[ -f .environment ] && source .environment
+
+# shellcheck disable=SC2086
+: ${DATACENTER:=federation}
+
 
 OPTS=""
 if [ "$1" = "--reset" ]; then
@@ -32,8 +38,6 @@ if [ "$1" = "--reset" ]; then
   echo "Press enter to continue."
   read -p "> "
 fi
-
-cd "$ROOT/../.."
 
 # shellcheck disable=SC2086
 ansible-playbook --ask-become-pass -i "$(pwd)/envs/$DATACENTER/etc/ansible/" \

@@ -1,0 +1,25 @@
+---
+
+- hosts: airflow-master
+  become: yes
+  vars_files:
+    - "{{ play_dir }}/vars/common.yml"
+    - "{{ play_dir }}/vars/versions.yml"
+    - "{{ play_dir }}/vars/infrastructure/endpoints.yml"
+    - "{{ play_dir }}/vars/reference/endpoints.yml"
+    - "{{ play_dir }}/vars/data-factory/endpoints.yml"
+    - "{{ play_dir }}/vars/data-factory/airflow.yml"
+
+  roles:
+
+    - role: spm
+      tags: ['spm', 'airflow-master', 'airflow', 'data-factory', 'marathon-app']
+
+    - role: airflow
+      airflow_install_master: true
+      airflow_install_agent: false
+      tags: ['airflow-master', 'airflow', 'data-factory', 'marathon-app']
+
+    - role: audit-deployment
+      installed_component: data-factory-airflow-master
+      tags: ['airflow', 'data-factory', 'marathon-app']

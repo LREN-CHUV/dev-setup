@@ -1,0 +1,25 @@
+---
+
+etckeeper_vcs: 'git'
+
+etckeeper_gitignore:
+  - 'tor/keys/'
+  - '/ufw/user.rules'
+
+proxy_package_manager: yes
+
+proxy_no_proxy:
+  - 127.0.0.1
+  - localhost
+  - "{{ inventory_hostname }}"
+  - "{{ fqdn | default(ansible_fqdn) }}"
+
+locales_present:
+  - en_US.UTF-8
+
+locales_language_packs_present:
+  - language-pack-en
+  - language-pack-en-base
+
+locales_default:
+  lang: en_US.UTF-8

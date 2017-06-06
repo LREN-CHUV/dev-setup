@@ -5,18 +5,18 @@
   vars_files:
     - "{{ play_dir }}/vars/common.yml"
     - "{{ play_dir }}/vars/versions.yml"
-
-  pre_tasks:
-
-    - name: Install OpenJDK 8 on Ubuntu Xenial - fixes problematic install of openjdk-8-jre-headless
-      apt: package=openjdk-8-jdk-headless
-      when: ansible_distribution_release == 'xenial'
+    - "{{ play_dir }}/vars/infrastructure/endpoints.yml"
+    - "{{ play_dir }}/vars/infrastructure/zookeeper.yml"
 
   roles:
 
+    # Java 8 is required for Zookeeper
+    - role: openjdk
+      tags: ['openjdk', 'zookeeper', 'mesos-frameworks', 'runtimes', 'infra', 'infrastructure']
+
     - role: zookeeper
-      tags: ['mesos']
+      tags: ['zookeeper', 'runtimes', 'infra', 'infrastructure']
 
     - role: audit-deployment
-      installed_component: zookeeper
-      tags: ['mesos', 'container-platforms']
+      installed_component: infrastructure-zookeeper
+      tags: ['zookeeper', 'runtimes', 'infra', 'infrastructure']

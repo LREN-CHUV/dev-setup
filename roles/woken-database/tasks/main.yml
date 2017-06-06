@@ -1,0 +1,66 @@
+---
+
+- name: Should woken-db be deployed in its own Postgres server?
+  set_fact:
+    do_woken_db_deploy: "{{ woken_db_deploy | bool }}"
+
+- include: marathon.yml
+  when: do_woken_db_deploy
+
+# run this task on the database host
+- name: Wait for the database to be up and running
+  wait_for: >
+    port="{{ woken_db_port }}"
+    delay=2
+
+- name: Drop database with name "woken"
+  postgresql_db:
+    name: "{{ woken_db_name }}"
+    port: "{{ woken_db_port }}"
+    login_host: "{{ woken_db_host }}"
+    login_user: "{{ woken_db_admin_user }}"
+    login_password: "{{ woken_db_admin_password }}"
+    state: absent
+  delegate_to: "{{ groups['control'][0] }}"
+  when: (not do_woken_db_deploy) and woken_db_cleanup
+
+- name: Create a new database with name "woken"
+  postgresql_db:
+    name: "{{ woken_db_name }}"
+    port: "{{ woken_db_port }}"
+    login_host: "{{ woken_db_host }}"
+    login_user: "{{ woken_db_admin_user }}"
+    login_password: "{{ woken_db_admin_password }}"
+    state: present
+  delegate_to: "{{ groups['control'][0] }}"
+
+- name: Create woken database user
+  postgresql_user:
+    login_host: "{{ woken_db_host }}"
+    login_user: "{{ woken_db_admin_user }}"
+    login_password: "{{ woken_db_admin_password }}"
+    db: "{{ woken_db_name }}"
+    port: "{{ woken_db_port }}"
+    name: "{{ woken_db_user }}"
+    password: "{{ woken_db_password }}"
+    role_attr_flags: "SUPERUSER"
+  delegate_to: "{{ groups['control'][0] }}"
+
+- name: Setup Woken database
+  docker_container:
+    name: setup_woken_db
+    image: "{{ woken_db_setup_image }}"
+    detach: no
+    network_mode: host
+    interactive: yes
+    cleanup: yes
+    env:
+      FLYWAY_DBMS: postgresql
+      FLYWAY_HOST: '{{ woken_db_host }}'
+      FLYWAY_PORT: '{{ woken_db_port }}'
+      FLYWAY_DATABASE_NAME: '{{ woken_db_name }}'
+      FLYWAY_SCHEMAS: "public"
+      FLYWAY_USER: '{{ woken_db_admin_user }}'
+      FLYWAY_PASSWORD: '{{ woken_db_admin_password }}'
+      FLYWAY_DRIVER: 'org.postgresql.Driver'
+  delegate_to: "{{ groups['control'][0] }}"
