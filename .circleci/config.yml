@@ -9,19 +9,27 @@ jobs:
     environment:
        - CIRCLECI: true
     steps:
-      - run: |
-          apt-get update
-          apt-get install -y shellcheck python-pip
-          pip install pre-commit ansible-lint
       - checkout
-      - run: |
-          git submodule sync
-          git submodule update --init
-          mkdir -p ~/Desktop
-      - run: |
-          pre-commit install
-          pre-commit run --all-files
-      - run: |
-          ./common/scripts/bootstrap.sh --skip-git-crypt
-          ./setup.sh All Standard skip_docker skip_yed
-          ./setup.sh All Hipster
+      - run:
+          name: "Install requirements"
+          command: |
+            apt-get update
+            apt-get install -y shellcheck python-pip
+            ./common/scripts/bootstrap.sh --skip-git-crypt
+            pip install pre-commit ansible-lint
+            mkdir -p ~/Desktop
+      - run:
+          name: "Initialise Git submodules and Git hooks"
+          command: |
+            ./after-git-clone.sh
+            ./after-update.sh
+      - run:
+          name: "Validate code quality"
+          command: |
+            pre-commit run --all-files
+      - run:
+          name: "Test setup"
+          command: |
+            ./common/scripts/bootstrap.sh --skip-git-crypt
+            ./setup.sh All Standard skip_docker skip_yed
+            ./setup.sh All Hipster
