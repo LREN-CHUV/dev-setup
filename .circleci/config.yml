@@ -1,0 +1,27 @@
+---
+
+version: 2
+jobs:
+  build:
+    working_directory: ~/src
+    docker:
+      - image: ubuntu:16.04
+    environment:
+       - CIRCLECI: true
+    steps:
+      - run: |
+          apt-get update
+          apt-get install -y shellcheck
+          pip install pre-commit ansible-lint
+      - checkout
+      - run: |
+          git submodule sync
+          git submodule update --init
+          mkdir -p ~/Desktop
+      - run: |
+          pre-commit install
+          pre-commit run --all-files
+      - run: |
+          ./common/scripts/bootstrap.sh --skip-git-crypt
+          ./setup.sh All Standard skip_docker skip_yed
+          ./setup.sh All Hipster
