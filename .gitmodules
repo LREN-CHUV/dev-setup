@@ -107,3 +107,6 @@
        path = roles/denkhaus.virtualbox
        url = https://github.com/Oefenweb/ansible-virtualbox.git
        branch = master
+[submodule "roles/java"]
+	path = roles/java
+	url = https://github.com/ludovicc/ansible-java.git
