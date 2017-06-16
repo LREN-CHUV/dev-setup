@@ -11,7 +11,7 @@ jobs:
     steps:
       - run: |
           apt-get update
-          apt-get install -y shellcheck
+          apt-get install -y shellcheck python-pip
           pip install pre-commit ansible-lint
       - checkout
       - run: |
