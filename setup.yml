@@ -137,7 +137,7 @@
         - sysadmin
         - captain
 
-    - role: java
+    - role: openjdk
       tags:
         - backend_dev
         - java

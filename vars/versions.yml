@@ -80,7 +80,6 @@ sonarqube_version: "6.0-alpine"
 
 # For development
 
-java_oracle_version: 8u60
 ansible_cmdb_version: 1.17
 
 maven_version: "3.3.9"
