@@ -57,11 +57,8 @@
             - /usr/local/bin
 
     - name: Install Ruby rake
-      gem:
-        name: "rake"
-        version: "10.5.0"
-        state: present
-        executable: "{{ ruby2_gem_bin }}"
+      command: >
+        {{ ruby2_gem_bin }} install rake -v '10.5.0'
       tags:
         - backend_dev
         - frontend_dev
