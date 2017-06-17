@@ -56,6 +56,17 @@
             - /usr/bin
             - /usr/local/bin
 
+    - name: Install Ruby rake
+      gem:
+        name: "rake"
+        version: "10.5.0"
+        state: present
+        executable: "{{ ruby2_gem_bin }}"
+      tags:
+        - backend_dev
+        - frontend_dev
+        - atom
+
     - name: Install some Ruby tools for Atom
       gem:
         name: "{{ item }}"
