@@ -59,6 +59,8 @@
     - name: Install Ruby rake
       command: >
         {{ ruby2_gem_bin }} install rake -v '10.5.0'
+      args:
+        creates: "/usr/share/rubygems-integration/all/gems/rake-10.5.0/bin/rake"
       tags:
         - backend_dev
         - frontend_dev
