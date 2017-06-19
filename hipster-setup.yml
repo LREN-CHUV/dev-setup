@@ -110,10 +110,6 @@
       tags:
         - backend_dev
 
-    - role: activator
-      tags:
-        - backend_dev
-
     - role: atom
       tags:
         - backend_dev

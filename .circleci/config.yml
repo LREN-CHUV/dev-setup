@@ -21,14 +21,14 @@ jobs:
             adduser hipster sudo
             ./common/scripts/bootstrap.sh --skip-git-crypt
             pip install pre-commit ansible-lint
-            mkdir -p ~/Desktop
+            mkdir -p /home/hipster/Desktop
       - run:
           name: "Initialise Git submodules and Git hooks"
           command: |
             ./after-git-clone.sh
             ./after-update.sh
             cp -R /root/src /home/hipster/
-            chown -R hipster /home/hipster/src
+            chown -R hipster:hipster /home/hipster
       - run:
           name: "Validate code quality"
           command: |
