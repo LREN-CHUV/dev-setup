@@ -20,7 +20,8 @@ jobs:
             ./common/scripts/bootstrap.sh --skip-git-crypt
             pip install pre-commit ansible-lint
             mkdir -p ~/Desktop
-            chmod -R a+rwX /root
+            cp -R /root/src /home/hipster/
+            chown -R hipster /home/hipster/src
       - run:
           name: "Initialise Git submodules and Git hooks"
           command: |
@@ -41,4 +42,4 @@ jobs:
       - run:
           name: "Test hipster installation"
           command: |
-            sudo -H -u hipster ./setup.sh All Hipster
+            sudo -H -u hipster /home/hipster/src/setup.sh All Hipster
