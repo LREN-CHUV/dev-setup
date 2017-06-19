@@ -42,7 +42,7 @@ perform_install() {
   local install=$1
   local ANSIBLE_PLAYBOOK="ansible-playbook --ask-become-pass"
   # Do not ask password on CircleCI
-  if [ -n "$CIRCLE_USERNAME" ]; then
+  if [ "$CIRCLECI" = true ]; then
     local ANSIBLE_PLAYBOOK="ansible-playbook"
   fi
   case "$install" in

@@ -20,13 +20,13 @@ jobs:
             ./common/scripts/bootstrap.sh --skip-git-crypt
             pip install pre-commit ansible-lint
             mkdir -p ~/Desktop
-            cp -R /root/src /home/hipster/
-            chown -R hipster /home/hipster/src
       - run:
           name: "Initialise Git submodules and Git hooks"
           command: |
             ./after-git-clone.sh
             ./after-update.sh
+            cp -R /root/src /home/hipster/
+            chown -R hipster /home/hipster/src
       - run:
           name: "Validate code quality"
           command: |
