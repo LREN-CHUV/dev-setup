@@ -16,7 +16,7 @@ jobs:
             apt-get update
             apt-get install -y sudo shellcheck python-pip
             perl -p -i -e 's/%sudo\s*ALL=\(ALL:ALL\) ALL/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
-            adduser --quiet --system --disabled-password --group --ingroup sudo hipster
+            adduser --quiet --system --disabled-password --group --add_extra_groups sudo hipster
             ./common/scripts/bootstrap.sh --skip-git-crypt
             pip install pre-commit ansible-lint
             mkdir -p ~/Desktop
