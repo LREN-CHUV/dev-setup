@@ -42,4 +42,4 @@ jobs:
       - run:
           name: "Test hipster installation"
           command: |
-            sudo -H -u hipster /home/hipster/src/setup.sh All Hipster
+            sudo -H -u hipster /bin/bash -c "CIRCLECI=true /home/hipster/src/setup.sh All Hipster"
