@@ -1,6 +1,8 @@
 ---
-ansible_python_interpreter: /usr/bin/python2.7 
+ansible_python_interpreter: /usr/bin/python2.7
 
-docker_registry_ip: 155.105.202.126
-docker_registry_dns: registry.federation.mip.hbp
-docker_opts: "--storage-driver=overlay --dns 155.105.251.102 --dns 155.105.251.86"
+docker_options:
+  - "--dns 155.105.251.102"
+  - "--dns 155.105.251.86"
+  - "--log-driver={{ docker_log_driver }}"
+  - "--disable-legacy-registry"
