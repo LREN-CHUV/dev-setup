@@ -32,6 +32,7 @@ demo
 
 ```
 
+# Select where data features are coming from: ldms-db or research-db
 portal_backend_features_from: 'ldsm-db'
 portal_backend_security_enabled: true
 
@@ -43,7 +44,7 @@ portal_frontend_base_url: "http://{{ portal_frontend_virtual_host }}"
 
 ```
 
-portal_backend_features_table: adni_merge
+portal_backend_features_table: mip_cde_features
 
 ```
 

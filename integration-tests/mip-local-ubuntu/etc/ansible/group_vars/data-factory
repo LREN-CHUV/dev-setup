@@ -5,6 +5,12 @@ airflow_group_id: 1011
 
 airflow_db_companion_bases: []
 
+airflow_scheduler_cpus: 0.2
+airflow_scheduler_mem: 500.0
+
+airflow_webserver_cpus: 0.2
+airflow_webserver_mem: 400
+
 airflow_pool_io_intensive: 1
 airflow_pool_remote_file_copy: 1
 airflow_pool_image_preprocessing: 1
