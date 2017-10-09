@@ -14,12 +14,13 @@ jobs:
           name: "Install requirements"
           command: |
             apt-get update
-            apt-get install -y sudo shellcheck python-pip libffi-dev
+            apt-get install -y sudo shellcheck python-pip libffi-dev software-properties-common
+            add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) multiverse"
+            apt-get update
             perl -p -i -e 's/%sudo\s*ALL=\(ALL:ALL\) ALL/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
             addgroup hipster
             adduser --quiet --system --disabled-password --group hipster
             adduser hipster sudo
-            ./common/scripts/bootstrap.sh --skip-git-crypt
             pip install pre-commit ansible-lint
             mkdir -p /home/hipster/Desktop
             chmod -R u+rwX /home/hipster/Desktop

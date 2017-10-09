@@ -40,7 +40,7 @@ atom_packages:
   - markdown-preview
 
 atom_user: '{{ user }}'
-atom_desktop_icon: true
+atom_desktop_icon: '{{ desktop_icon | default(true) }}'
 
 fish_completions:
   - 'apt-get'

@@ -105,6 +105,9 @@ fi
 remaining_opts="$*"
 ANSIBLE_OPTS=${ANSIBLE_OPTS:-"$remaining_opts"}
 ANSIBLE_OPTS="-e user=$USER -e user_home=$HOME $ANSIBLE_OPTS -e play_dir=$(pwd) $ANSIBLE_OPTS"
+if [ "$CIRCLECI" ]; then
+  ANSIBLE_OPTS="$ANSIBLE_OPTS -e desktop_icon=false"
+fi
 if [ -z "$install" ]; then
   PS3='Installation type: '
   install_options=("Standard" "Hipster")
