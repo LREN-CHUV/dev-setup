@@ -22,6 +22,7 @@ jobs:
             ./common/scripts/bootstrap.sh --skip-git-crypt
             pip install pre-commit ansible-lint
             mkdir -p /home/hipster/Desktop
+            chmod -R u+rwX /home/hipster/Desktop
       - run:
           name: "Initialise Git submodules and Git hooks"
           command: |
