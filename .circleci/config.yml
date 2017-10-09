@@ -14,7 +14,7 @@ jobs:
           name: "Install requirements"
           command: |
             apt-get update
-            apt-get install -y sudo shellcheck python-pip git libffi-dev software-properties-common
+            apt-get install -y sudo shellcheck python-pip git libffi-dev curl software-properties-common
             add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) multiverse"
             apt-get update
             perl -p -i -e 's/%sudo\s*ALL=\(ALL:ALL\) ALL/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
