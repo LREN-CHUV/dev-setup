@@ -2,6 +2,11 @@
 
 set -e
 
+debug=false
+if [ "$1" == "--debug" ]; then
+  debug=true
+fi
+
 get_script_dir () {
      SOURCE="${BASH_SOURCE[0]}"
 
@@ -20,8 +25,8 @@ cd "$ROOT/../.."
 
 which ansible > /dev/null || ./common/scripts/bootstrap.sh
 
-ANSIBLE_OPTS=""
-SETUP_ANSIBLE_OPTS=""
+ANSIBLE_OPTS=()
+SETUP_ANSIBLE_OPTS=()
 target=""
 
 mkdir -p envs/mip-local/etc/ansible/
@@ -33,7 +38,8 @@ select location in "${options[@]}";
 do
   case "$location" in
       "This machine")
-          ANSIBLE_OPTS="-e mip_install=local -e target_server=localhost"
+          ANSIBLE_OPTS+=("-e mip_install=local")
+          ANSIBLE_OPTS+=("-e target_server=localhost")
           target="this machine"
           cat <<EOF > envs/mip-local/etc/ansible/hosts
 [all]
@@ -51,7 +57,9 @@ EOF
           read -p "Server DNS > " server_dns
           read -p "Server login user > " server_user
           read -p "Server SSH port (usually 22) > " server_ssh_port
-          ANSIBLE_OPTS="-e mip_install=remote -e target_server=$server_dns -e server_user=$server_user"
+          ANSIBLE_OPTS+=("-e mip_install=remote")
+          ANSIBLE_OPTS+=("-e target_server=$server_dns")
+          ANSIBLE_OPTS+=("-e server_user=$server_user")
           target="$server_dns"
           cat <<EOF > envs/mip-local/etc/ansible/hosts
 [all]
@@ -76,10 +84,11 @@ select sudo_pwd in "${options[@]}";
 do
   case "$sudo_pwd" in
       "yes")
-          ANSIBLE_OPTS="$ANSIBLE_OPTS --become --ask-become-pass"
+          ANSIBLE_OPTS+=("--become")
+          ANSIBLE_OPTS+=("--ask-become-pass")
           ;;
       "no")
-          ANSIBLE_OPTS="$ANSIBLE_OPTS --become"
+          ANSIBLE_OPTS+=("--become")
           ;;
         *)
           echo invalid option
@@ -89,18 +98,36 @@ do
   break
 done
 
+declare -A mip_building_blocks
+# shellcheck disable=SC2154
+{
+  mip_building_blocks["dc"]=true
+  mip_building_blocks["df"]=true
+  mip_building_blocks["af"]=true
+  mip_building_blocks["hdb"]=true
+  mip_building_blocks["ref"]=true
+  mip_building_blocks["wa"]=true
+}
+
 echo
 echo "Which components of MIP Local do you want to install?"
 PS3='> '
-options=("All" "No Data Factory")
+options=("All" "Web analytics and databases only" "Data Factory only")
 select building_blocks in "${options[@]}";
 do
   case "$building_blocks" in
     "All")
-        ANSIBLE_OPTS="$ANSIBLE_OPTS -e mip_building_blocks=all"
         ;;
-    "No Data Factory")
-        ANSIBLE_OPTS="$ANSIBLE_OPTS -e mip_building_blocks=!df"
+    "Web analytics and databases only")
+        unset mip_building_blocks['dc']
+        unset mip_building_blocks['df']
+        ;;
+    "Data Factory only")
+        unset mip_building_blocks["dc"]
+        unset mip_building_blocks["af"]
+        unset mip_building_blocks["hdb"]
+        unset mip_building_blocks["ref"]
+        unset mip_building_blocks["wa"]
         ;;
     *)
         echo invalid option
@@ -110,51 +137,150 @@ do
   break
 done
 
-if [[ "$location" == "This machine" && "$building_blocks" == "All" && ! -d /usr/local/MATLAB/2016b ]]; then
-    echo "Is Matlab 2016b installed on this machine?"
-    PS3="> "
-    options=("yes" "no")
-    select matlab_installed in "${options[@]}";
-    do
-      case "$matlab_installed" in
-          "yes")
-              echo "Enter the root of Matlab installation, e.g. /opt/MATLAB/2016b :"
-              read -p "path > " matlab_root
-              ANSIBLE_OPTS="$ANSIBLE_OPTS -e matlab_root=$matlab_root"
-              ;;
-          "no")
-              SETUP_ANSIBLE_OPTS="$SETUP_ANSIBLE_OPTS --skip-tags=spm"
-              echo "The Data Factory will be installed but image pre-processing will not be functional."
-              echo "When Matlab is available, please run again the installation to setup Matlab and SPM using:"
-              echo "  ./setup.sh --tags=data-factory"
-              echo
-              ;;
-            *)
-              echo invalid option
-              exit 1
-              ;;
-      esac
-      break
-    done
+if [[ "${mip_building_blocks['hdb']}" == "true" ]]; then
+  echo
+  echo "Do you want to store research-grade data in CSV files or in a relational database?"
+  PS3='> '
+  options=("CSV files" "Relational database")
+  select building_blocks in "${options[@]}";
+  do
+    case "$building_blocks" in
+      "CSV files")
+          ANSIBLE_OPTS+=("-e features_from=ldsm-db")
+          ;;
+      "Relational database")
+          unset mip_building_blocks['hdb']
+          ANSIBLE_OPTS+=("-e features_from=research-db")
+          ;;
+      *)
+          echo invalid option
+          exit 1
+          ;;
+    esac
+    break
+  done
 fi
+
+if [[ "${mip_building_blocks['df']}" == "true" ]]; then
+
+  echo "Please enter an id for the main dataset to process, e.g. 'demo' and a readable label for it, e.g. 'Demo data'"
+  read -p "Id for the main dataset > " main_dataset_id
+  read -p "Label for the main dataset > " main_dataset_label
+  ANSIBLE_OPTS+=("-e main_dataset_id='${main_dataset_id:-demo}'")
+  ANSIBLE_OPTS+=("-e main_dataset_label='${main_dataset_label:-demo}'")
+
+  if [[ "$location" == "This machine" && ! -d /usr/local/MATLAB/2016b ]]; then
+      echo "Is Matlab 2016b installed on this machine?"
+      PS3="> "
+      options=("yes" "no")
+      select matlab_installed in "${options[@]}";
+      do
+        case "$matlab_installed" in
+            "yes")
+                echo "Enter the root of Matlab installation, e.g. /opt/MATLAB/2016b :"
+                read -p "path > " matlab_root
+                ANSIBLE_OPTS+=("-e matlab_root=$matlab_root")
+                ;;
+            "no")
+                SETUP_ANSIBLE_OPTS+=("--skip-tags=spm")
+                echo "The Data Factory will be installed but image pre-processing will not be functional."
+                echo "When Matlab is available, please run again the installation to setup Matlab and SPM using:"
+                echo "  ./setup.sh --tags=data-factory"
+                echo
+                ;;
+              *)
+                echo invalid option
+                exit 1
+                ;;
+        esac
+        break
+      done
+  fi
+
+  echo "Do you want to send progress and alerts on data processing to a Slack channel?"
+  PS3="> "
+  options=("yes" "no")
+  select use_slack in "${options[@]}";
+  do
+    case "$use_slack" in
+        "yes")
+            echo "To enable Slack, please enter the name of the channel and the Slack token"
+            read -p "Slack channel, e.g. #data > " slack_channel
+            read -p "Slack API token > " slack_token
+            if [[ -n "$slack_channel" && -n "$slack_token" ]]; then
+              ANSIBLE_OPTS+=("-e slack_channel='$slack_channel'")
+              ANSIBLE_OPTS+=("-e slack_token='$slack_token'")
+            else
+              echo "You did not filled all required information. Slack notifications are disabled"
+            fi
+            ;;
+        "no")
+            ;;
+          *)
+            echo invalid option
+            exit 1
+            ;;
+    esac
+    break
+  done
+
+fi
+
+if [[ "${mip_building_blocks['wa']}" == "true" ]]; then
+  echo "Do you want to secure access to the local MIP Web portal?"
+  PS3="> "
+  options=("yes" "no")
+  select portal_security in "${options[@]}";
+  do
+    case "$portal_security" in
+        "yes")
+            echo "To enable portal security, please enter the HBP Client ID and Client secret"
+            read -p "HBP Client ID > " hbp_client_id
+            read -p "HBP Client secret > " hbp_client_secret
+            if [[ -n "$hbp_client_id" && -n "$hbp_client_secret" ]]; then
+              ANSIBLE_OPTS+=("-e portal_backend_hbp_client_id=$hbp_client_id")
+              ANSIBLE_OPTS+=("-e portal_backend_hbp_client_secret=$hbp_client_secret")
+            else
+              echo "You did not filled all required information. Security is disabled"
+            fi
+            ;;
+        "no")
+            ;;
+          *)
+            echo invalid option
+            exit 1
+            ;;
+    esac
+    break
+  done
+
+  echo "To enable Google analytics, please enter the Google tracker ID or leave this blank to disable it"
+  read -p "Google tracker ID > " google_tracker_id
+  ANSIBLE_OPTS+=("-e portal_frontend_google_tracker_id=$google_tracker_id")
+fi
+
+ANSIBLE_OPTS+=("-e mip_building_blocks=$(echo "${!mip_building_blocks[@]}" | tr ' ' ',')")
 
 echo
 echo "Generating the configuration for MIP Local..."
-echo "Additional informations will be asked, including a long list of passwords for the databases."
-echo "Please keep this information safe."
 echo
 if [ "$sudo_pwd" == "yes" ]; then
   echo "Please enter the sudo password for the target server"
   echo
 fi
 
-# shellcheck disable=SC2086
-ansible-playbook $ANSIBLE_OPTS \
+if [ "$debug" == "true" ]; then
+  set -x
+fi
+
+ansible-playbook "${ANSIBLE_OPTS[@]}" \
         -i envs/mip-local/etc/ansible \
         -e play_dir="$(pwd)" \
         -e lib_roles_path="$(pwd)/roles" \
         -e datacenter="mip-local" \
         common/playbooks/generate-mip-local-config.yml
+
+set +x
 
 echo "DATACENTER=mip-local" > .environment
 
@@ -195,4 +321,4 @@ git add .
 echo "Run this command first after checking the configuration"
 echo "git commit -m 'Configuration for MIP Local'"
 
-echo "Run ./setup.sh $SETUP_ANSIBLE_OPTS to start the installation"
+echo "Run ./setup.sh ${SETUP_ANSIBLE_OPTS[*]} to start the installation"

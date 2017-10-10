@@ -33,3 +33,6 @@ jobs:
           name: "Test tester installation"
           command: |
             gosu tester /bin/bash -c "CIRCLECI=true USER=tester /home/tester/src/setup.sh All Hipster"
+    notify:
+      webhooks:
+      - url: 'https://webhook.atomist.com/atomist/circle'
