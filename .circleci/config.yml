@@ -5,46 +5,18 @@ jobs:
   build:
     working_directory: ~/src
     docker:
-      - image: ubuntu:16.04
+      - image: hbpmip/ubuntu-for-ci:16.04-1
     environment:
        - CIRCLECI: true
     steps:
       - checkout
       - run:
-          name: "Install requirements"
-          command: |
-            apt-get update
-            apt-get install -y sudo shellcheck python-pip git libffi-dev curl software-properties-common
-            add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) multiverse"
-            apt-get update
-            perl -p -i -e 's/%sudo\s*ALL=\(ALL:ALL\) ALL/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
-            addgroup hipster
-            adduser --quiet --system --disabled-password --group hipster
-            adduser hipster sudo
-            pip install pre-commit==1.3.0 ansible-lint
-            mkdir -p /home/hipster/Desktop
-            chmod -R u+rwX /home/hipster/Desktop
-            export GOSU_VERSION=1.10
-            GOSU_DOWNLOAD_URL="https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64"
-            GOSU_DOWNLOAD_SIG="https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc"
-            GOSU_DOWNLOAD_KEY="0x036A9C25BF357DD4"
-            gpg --keyserver pgp.mit.edu --recv-keys $GOSU_DOWNLOAD_KEY || \
-              gpg --keyserver hkp://ha.pool.sks-keyservers.net --recv-keys $GOSU_DOWNLOAD_KEY
-            echo "trusted-key $GOSU_DOWNLOAD_KEY" >> /root/.gnupg/gpg.conf
-            curl -sSL "$GOSU_DOWNLOAD_URL" > gosu-amd64
-            curl -sSL "$GOSU_DOWNLOAD_SIG" > gosu-amd64.asc
-            gpg --verify gosu-amd64.asc
-            rm -f gosu-amd64.asc
-            mv gosu-amd64 /usr/bin/gosu
-            chmod +x /usr/bin/gosu
-
-      - run:
           name: "Initialise Git submodules and Git hooks"
           command: |
             ./after-git-clone.sh
             ./after-update.sh
-            cp -R /root/src /home/hipster/
-            chown -R hipster:hipster /home/hipster
+            cp -R /root/src /home/tester/
+            chown -R tester:tester /home/tester
       - run:
           name: "Validate code quality"
           command: |
@@ -58,6 +30,6 @@ jobs:
           command: |
             ./setup.sh All Standard skip_docker skip_yed
       - run:
-          name: "Test hipster installation"
+          name: "Test tester installation"
           command: |
-            gosu hipster /bin/bash -c "CIRCLECI=true USER=hipster /home/hipster/src/setup.sh All Hipster"
+            gosu tester /bin/bash -c "CIRCLECI=true USER=tester /home/tester/src/setup.sh All Hipster"
