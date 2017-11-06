@@ -106,7 +106,8 @@ airflow_scripts:
     dest: '{{ airflow_scripts_root }}/data-factory-airflow-dags'
 
 airflow_scripts_root: '/opt/airflow-scripts'
-airflow_scripts_verify_commit: true
+# TODO set to true, this may require an additional step before installation to trust our scripts
+airflow_scripts_verify_commit: false
 
 airflow_load_examples: false
 
@@ -125,7 +126,7 @@ airflow_scheduler_marathon_dependencies: "
   {%- if 'airflow-db' not in research_db_companion_bases -%}
     {%- set deps = deps + [airflow_db_marathon_id] -%}
   {%- endif -%}
-  {{ deps }}
+  {{- deps -}}
 "
 
 airflow_webserver_marathon_dependencies: "
@@ -133,7 +134,7 @@ airflow_webserver_marathon_dependencies: "
   {%- if 'airflow-db' not in research_db_companion_bases -%}
     {%- set deps = deps + [airflow_db_marathon_id] -%}
   {%- endif -%}
-  {{ deps }}
+  {{- deps -}}
 "
 
 # Listen to all incoming requests

@@ -18,7 +18,8 @@ portal_db_host: "
   {%- if 'portal-db' in research_db_companion_bases -%}
     {{ research_db_host }}
   {%- else -%}
-    {{ fqdn | default(ansible_fqdn) }}
+    {%- set host = groups['portal-db'][0] -%}
+    {{ hostvars[host]['fqdn'] | default(hostvars[host]['ansible_fqdn']) }}
   {%- endif -%}
 "
 portal_db_name: portal
@@ -33,7 +34,11 @@ portal_backend_akka_port: 4489
 # Prefix path for all services provided by Portal backend
 portal_backend_context_path: ""
 
-internal_portal_backend_server: '{{ fqdn | default(ansible_fqdn) }}:{{ portal_backend_port }}'
+portal_backend_host: "
+  {%- set host = groups['portal-backend'][0] -%}
+  {{- hostvars[host]['fqdn'] | default(hostvars[host]['ansible_fqdn']) -}}
+"
+internal_portal_backend_server: '{{ portal_backend_host }}:{{ portal_backend_port }}'
 
 # required by portal-frontend
 portal_backend_marathon_id: /web-analytics/portal-backend
@@ -43,3 +48,8 @@ portal_frontend_virtual_host: '{{ fqdn | default(ansible_fqdn) }}'
 portal_backend_frontend_login_url: "{{ portal_frontend_base_url }}/services/login/hbp"
 portal_backend_frontend_after_login_url: "{{ portal_frontend_base_url }}/home"
 portal_backend_frontend_after_logout_url: "{{ portal_frontend_base_url }}/services/login/hbp"
+
+# Select where data features are coming from: ldms-db or research-db
+portal_backend_features_from: '{{ features_from }}'
+# Use mip_cde_features to see only research data, otherwise use mip_local_features
+portal_backend_features_table: '{{ features_table }}'

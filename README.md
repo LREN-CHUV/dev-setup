@@ -8,7 +8,7 @@ It assumes that you are using Ubuntu 16.04 or newer.
 
 # License
 
-Copyright © 2016 LREN CHUV
+Copyright © 2016-2017 LREN CHUV
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

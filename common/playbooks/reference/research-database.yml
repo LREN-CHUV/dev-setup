@@ -1,6 +1,6 @@
 ---
 
-- hosts: research-db,research-database
+- hosts: research-db
   become: yes
   gather_facts: yes
   vars_files:
@@ -13,15 +13,20 @@
 
   pre_tasks:
 
-  - name: Setup standard research datasets
-    include_vars: "{{ play_dir }}/vars/reference/standard-research-datasets.yml"
-    when: setup_standard_research_datasets is defined and setup_standard_research_datasets == 'research-db'
+  - name: Need to add pre-defined research datasets?
+    set_fact:
+      research_add_predefined_datasets: "{{ setup_research_datasets is defined and setup_research_datasets != '' and features_from == 'research-db' }}"
     tags: ['research-database', 'research-db', 'database', 'reference', 'marathon-app']
 
-  - name: Add standard research datasets to research database setup
+  - name: Setup predefined research datasets
+    include_vars: "{{ play_dir }}/vars/reference/{{ setup_research_datasets }}-research-datasets.yml"
+    when: research_add_predefined_datasets
+    tags: ['research-database', 'research-db', 'database', 'reference', 'marathon-app']
+
+  - name: Add predefined data to research setup
     set_fact:
-      research_db_docker_setup: "{{ standard_research_db_docker_setup | union(research_db_docker_setup | default([])) }}"
-    when: setup_standard_research_datasets is defined and setup_standard_research_datasets == 'research-db'
+      research_db_docker_setup: "{{ predefined_research_db_docker_setup | union(research_db_docker_setup | default([])) }}"
+    when: research_add_predefined_datasets
     tags: ['research-database', 'research-db', 'database', 'reference', 'marathon-app']
 
   roles:

@@ -18,7 +18,8 @@ woken_db_host: "
   {%- if 'woken-db' in research_db_companion_bases -%}
     {{ research_db_host }}
   {%- else -%}
-    {{ fqdn | default(ansible_fqdn) }}
+    {%- set host = groups['woken-db'][0] -%}
+    {{ hostvars[host]['fqdn'] | default(hostvars[host]['ansible_fqdn']) }}
   {%- endif -%}
 "
 woken_db_name: woken
@@ -29,15 +30,28 @@ woken_db_jdbc_url: "jdbc:postgresql://{{ woken_db_host }}:{{ woken_db_port }}/{{
 woken_db_jdbc_driver: "org.postgresql.Driver"
 woken_db_jdbc_jar: "/usr/lib/R/libraries/postgresql-9.4-1201.jdbc41.jar"
 
+# Select where data features are coming from: ldms-db or research-db
+woken_features_from: '{{ features_from }}'
+# Use mip_cde_features to see only research data, otherwise use mip_local_features
+woken_features_table: '{{ features_table }}'
+
 chronos_marathon_id: /algorithm-factory/chronos
 
-# TODO: allow Chronos to be deployed on another machine
-chronos_port: 4400
-internal_chronos_url: "http://{{ woken_host }}:{{ chronos_port }}"
+chronos_host: "
+  {%- set host = groups['chronos'][0] -%}
+  {{- hostvars[host]['fqdn'] | default(hostvars[host]['ansible_fqdn']) -}}
+"
+chronos_http_port: 4400
+chronos_libprocess_port: 4401
+chronos_ip_address: "{{ private_ipv4 }}"
+internal_chronos_url: "http://{{ chronos_host }}:{{ chronos_http_port }}"
 
 woken_marathon_id: /algorithm-factory/woken
 
-woken_host: "{{ fqdn | default(ansible_fqdn) }}"
+woken_host: "
+  {%- set host = groups['woken'][0] -%}
+  {{- hostvars[host]['fqdn'] | default(hostvars[host]['ansible_fqdn']) -}}
+"
 woken_ip_address: "{{ private_ipv4 }}"
 
 woken_docker_network: HOST

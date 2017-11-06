@@ -1,24 +1,28 @@
 ---
 
-{% if 'wa' in mip_building_blocks or 'af' in mip_building_blocks %}
+{% if 'wa' in mip_building_blocks or 'af' in mip_building_blocks or 'hdb' in mip_building_blocks or 'ref' in mip_building_blocks %}
+# Select where data features are coming from: ldms-db or research-db
+features_from: '{{ features_from }}'
 # Use mip_cde_features to see only research data, otherwise use mip_local_features
+{% if features_from == 'ldsm-db' %}
+# PostgresRAW used in LDSM database does not yet support merging research data with clinical data
+features_table: 'mip_cde_features'
+{% elif gitlab_com_login is defined and gitlab_com_login and gitlab_com_password %}
 features_table: 'mip_local_features'
-
+{% else %}
+features_table: 'mip_cde_features'
 {% endif %}
-{% if 'af' in mip_building_blocks %}
-woken_features_from: '{{ features_from }}'
-
-{% endif %}
-{% if 'wa' in mip_building_blocks %}
-portal_backend_features_from: '{{ features_from }}'
-portal_backend_security_enabled: {% if portal_backend_hbp_client_id %}yes{% else %}no{% endif %}
-
-portal_frontend_base_url: "{{ portal_frontend_base_url }}"
-portal_frontend_virtual_host: "{{ portal_frontend_base_url | regex_replace('^.*://(.*)([:/].*)?$', '\\1') }}"
+# Setup the standard research datasets into research-db (when features_from = 'research-db'). otherwise ldsm-db
+# Valid values are 'mip-standard', 'sample' or ''
+setup_research_datasets: '{% if gitlab_com_login and gitlab_com_password %}mip-standard{% endif %}'
+# Setup some pre-defined metadata
+# Valid values are 'mip-standard', 'sample' or ''
+setup_meta_datasets: 'mip-standard'
 
 {% endif %}
 {% if 'ref' in mip_building_blocks %}
 {# save memory by starting one Postgres server 'research-db' and creating all databases on it #}
+# List of databases to collocate and install on the Research db server
 research_db_companion_bases:
   - meta-db
 {% if 'af' in mip_building_blocks %}
@@ -35,16 +39,11 @@ research_db_companion_bases:
   - mipmap-db
 {% endif %}
 
-{% if gitlab_com_login and gitlab_com_password %}
-# Setup the standard research datasets
-setup_standard_research_datasets: '{{ features_from }}'
-{% endif %}
-# Setup the standard metadata
-setup_standard_metadata: {% if 'wa' in mip_building_blocks or 'af' in mip_building_blocks %}yes{% else %}no{% endif %}
-
 {% elif 'df' in mip_building_blocks %}
+# List of databases to collocate and install on the Research db server
 research_db_companion_bases: []
 {# databases for Data Factory are defined in data-factory group vars  #}
+
 {% endif %}
 {% if 'df' in mip_building_blocks %}
 {% raw -%}
@@ -52,3 +51,15 @@ airflow_web_port: 4080
 airflow_web_base_url: "http://{{ fqdn | default(ansible_fqdn) }}:{{ airflow_web_port }}"
 {%- endraw %}
 {% endif %}
+{% if 'wa' in mip_building_blocks %}
+# Enable user login with HBP OpenID service
+portal_backend_security_enabled: {% if portal_backend_hbp_client_id is defined and portal_backend_hbp_client_id %}yes{% else %}no{% endif %}
+
+# The base URL used for redirection. Required to redirect the user to the correct location, when the site address is changed by a proxy for example.
+portal_frontend_base_url: "{{ portal_frontend_base_url }}"
+# The virtualhost domain to register in Nginx reverse proxy.
+portal_frontend_virtual_host: "{{ portal_frontend_base_url | regex_replace('^.*://(.*)([:/].*)?$', '\\1') }}"
+
+{% endif %}
+
+...

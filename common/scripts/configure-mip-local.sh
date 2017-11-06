@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+#
+# Configure an installation of MIP Local on this machine or on a remote machine accessible by SSH.
+#
+
 set -e
 
 debug=false
@@ -63,7 +67,7 @@ EOF
           target="$server_dns"
           cat <<EOF > envs/mip-local/etc/ansible/hosts
 [all]
-$server_dns ansible_connection=ssh ansible_ssh_host=$server_dns ansible_ssh_user=$server_user ansible_ssh_port=$server_ssh_port
+$server_dns ansible_connection=ssh ansible_ssh_host=$server_dns ansible_ssh_user=$server_user ansible_ssh_port=${server_ssh_port:-22}
 
 [managed]
 $server_dns
@@ -318,7 +322,16 @@ which gpg > /dev/null || (
 
 git add .
 
-echo "Run this command first after checking the configuration"
-echo "git commit -m 'Configuration for MIP Local'"
-
-echo "Run ./setup.sh ${SETUP_ANSIBLE_OPTS[*]} to start the installation"
+echo
+echo "Generation of the standard configuration for MIP Local complete!"
+echo
+echo "You can review the configuration located in $ROOT/envs/mip-local/etc/ansible/"
+echo "and customise it further for your environment and needs."
+echo "More information about the configuration settings can be found in"
+echo "  $ROOT/docs/configuration/"
+echo
+echo "Before starting the installation, please commit the configuration in Git:"
+echo "  git commit -m 'Configuration for MIP Local'"
+echo
+echo "Then run setup.sh to start the installation"
+echo "  ./setup.sh ${SETUP_ANSIBLE_OPTS[*]}"

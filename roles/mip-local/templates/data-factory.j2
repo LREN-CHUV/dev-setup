@@ -33,6 +33,9 @@ airflow_extra_settings: "
 
 {% if matlab_root is defined %}
 matlab_root: '{{ matlab_root }}'
+{% else %}
+# Please uncomment this line and define the root of your MATlab installation
+# matlab_root: '/path/to/MATLAB'
 {% endif %}
 
 # Configuration for MRI preprocessing pipeline running in Airflow
@@ -46,4 +49,6 @@ data_factory_slack_channel_user: 'Airflow'
 main_dataset_id: '{{ main_dataset_id }}'
 main_dataset_label: '{{ main_dataset_label }}'
 main_data_preprocessing_scanners: 'once'
-main_data_preprocessing_pipelines: 'dicom_to_nifti,neuro_morphometric_atlas'
+main_data_preprocessing_pipelines: 'dicom_to_nifti,neuro_morphometric_atlas,export_features,catalog_to_i2b2'
+
+...
