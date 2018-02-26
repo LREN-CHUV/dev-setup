@@ -3,7 +3,7 @@
 mip_version: "2.5.3"
 
 java_version: 8
-docker_version: "{% if ansible_os_family == 'RedHat' %}17.03.2{% else %}17.09.1{% endif %}"
+docker_version: "{% if ansible_os_family == 'RedHat' %}17.03.2{% else %}17.12.0{% endif %}"
 docker_debian_package_version: "ce-0"
 docker_redhat_package_version: "ce"
 docker_registry_version: "2.3.1"
@@ -105,11 +105,11 @@ maven_version: "3.5.2"
 
 nodejs_version: "4.6"
 
-captain_version: "1.1.0"
+captain_version: "1.1.2"
 docker_compose_version: "1.18.0"
 
-virtualbox_version: "5.1"
-vagrant_version: "1.9.7"
+virtualbox_version: "5.2"
+vagrant_version: "2.0.2"
 
 # IDEs
 sublimetext_build: "3114"
