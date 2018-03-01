@@ -5,4 +5,3 @@ docker_options:
   - "--dns 155.105.251.102"
   - "--dns 155.105.251.86"
   - "--log-driver={{ docker_log_driver }}"
-  - "--disable-legacy-registry"
