@@ -13,8 +13,9 @@ zookeeper_debian_package_version: "1"
 mesos_version: "1.5.0"
 mesos_package_version: "2.0.1"
 mesos_ui_version: "standalone-0.1.4"
-marathon_version: "1.5.4"
+marathon_version: "1.5.6"
 chronos_version: "v3.0.2"
+caddy_version: "0.10.10-5"
 
 airflow_version: '1.9.0'
 airflow_db_image: "postgres"
@@ -32,9 +33,9 @@ nginx_official_repo: True
 
 # Versions of our Docker containers
 # TODO: frontend will need more updates
-portal_frontend_version: "2.7.0"
-portal_backend_version: "2.6.0"
-woken_version: "2.3.0"
+portal_frontend_version: "2.7.2"
+portal_backend_version: "2.6.2"
+woken_version: "2.3.9"
 woken_algorithms:
   - name: histograms
     docker_image: "hbpmip/python-histograms:0.3.6"
@@ -49,16 +50,16 @@ woken_algorithms:
     docker_image: "hbpmip/python-anova:0.3.6"
     predictive: false
   - name: knn
-    docker_image: "hbpmip/java-rapidminer-knn:0.2.1"
+    docker_image: "hbpmip/java-rapidminer-knn:0.2.2"
     predictive: true
   - name: naiveBayes
-    docker_image: "hbpmip/java-rapidminer-naivebayes:0.2.0"
+    docker_image: "hbpmip/java-rapidminer-naivebayes:0.2.1"
     predictive: true
   - name: tSNE
     docker_image: "hbpmip/python-tsne:0.3.3"
     predictive: true
 
-woken_validation_version: "2.2.6"
+woken_validation_version: "2.2.15"
 woken_db_setup_version: '1.0.2'
 
 # Reference data
@@ -66,10 +67,10 @@ woken_db_setup_version: '1.0.2'
 mip_cde_meta_db_setup_version: '1.2.0'
 
 adni_merge_db_setup_version: '1.5.1'
-edsd_data_db_setup_version: '1.4.0'
+edsd_data_db_setup_version: '1.4.1'
 ppmi_data_db_setup_version: '1.1.1'
 
-sample_meta_db_setup_version: '0.4.2'
+sample_meta_db_setup_version: '0.4.3'
 sample_data_db_setup_version: '0.5.0'
 
 # Data factory
