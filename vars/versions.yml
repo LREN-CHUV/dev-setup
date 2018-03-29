@@ -1,6 +1,6 @@
 ---
 
-mip_version: "2.5.3"
+mip_version: "2.6.0-rc1"
 
 java_version: 8
 docker_version: "{% if ansible_os_family == 'RedHat' %}17.03.2{% else %}17.12.0{% endif %}"
@@ -25,53 +25,53 @@ mri_db_version: "{{ postgres_version }}"
 
 postgres_version: "9.6.5-alpine"
 postgres_jdbc_driver: postgresql-9.3-1103.jdbc41.jar
-ldsm_db_version: 'v1.2'
-postgresraw_ui_version: 'v1.4'
+ldsm_db_version: 'v1.3'
+postgresraw_ui_version: 'v1.5'
 
 # Use latest NGinx from official repo
 nginx_official_repo: True
 
 # Versions of our Docker containers
-# TODO: frontend will need more updates
-portal_frontend_version: "2.7.2"
-portal_backend_version: "2.6.2"
-woken_version: "2.3.9"
-woken_algorithms:
-  - name: histograms
-    docker_image: "hbpmip/python-histograms:0.3.6"
-    predictive: false
-  - name: statisticsSummary
-    docker_image: "hbpmip/python-summary-statistics:0.1.2"
-    predictive: false
-  - name: linearRegression
-    docker_image: "hbpmip/python-linear-regression:0.0.7"
-    predictive: false
-  - name: anova
-    docker_image: "hbpmip/python-anova:0.3.6"
-    predictive: false
-  - name: knn
-    docker_image: "hbpmip/java-rapidminer-knn:0.2.2"
-    predictive: true
-  - name: naiveBayes
-    docker_image: "hbpmip/java-rapidminer-naivebayes:0.2.1"
-    predictive: true
-  - name: tSNE
-    docker_image: "hbpmip/python-tsne:0.3.3"
-    predictive: true
+portal_frontend_version: "2.9.1"
+portal_backend_version: "2.6.7"
+woken_version: "2.4.7"
+woken_algorithms: []
+# Do not override versions of algorithms, they are already defined in Woken
+#  - name: histograms
+#    docker_image: "hbpmip/python-histograms:0.4.0"
+#    predictive: false
+#  - name: statisticsSummary
+#    docker_image: "hbpmip/python-summary-statistics:0.3.0"
+#    predictive: false
+#  - name: linearRegression
+#    docker_image: "hbpmip/python-linear-regression:0.0.7"
+#    predictive: false
+#  - name: anova
+#    docker_image: "hbpmip/python-anova:0.3.6"
+#    predictive: false
+#  - name: knn
+#    docker_image: "hbpmip/java-rapidminer-knn:0.2.2"
+#    predictive: true
+#  - name: naiveBayes
+#    docker_image: "hbpmip/java-rapidminer-naivebayes:0.2.1"
+#    predictive: true
+#  - name: tSNE
+#    docker_image: "hbpmip/python-tsne:0.4.0"
+#    predictive: true
 
-woken_validation_version: "2.2.15"
+woken_validation_version: "2.4.1"
 woken_db_setup_version: '1.0.2'
 
 # Reference data
 
-mip_cde_meta_db_setup_version: '1.2.0'
+mip_cde_meta_db_setup_version: '1.3.0'
 
 adni_merge_db_setup_version: '1.5.1'
 edsd_data_db_setup_version: '1.4.1'
 ppmi_data_db_setup_version: '1.1.1'
 
-sample_meta_db_setup_version: '0.4.3'
-sample_data_db_setup_version: '0.5.0'
+sample_meta_db_setup_version: '0.6.0'
+sample_data_db_setup_version: '0.6.0'
 
 # Data factory
 
